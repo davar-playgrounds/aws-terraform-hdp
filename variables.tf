@@ -7,7 +7,7 @@ variable "consul_server" {
 }
 
 variable "consul_port" {
-  default   = "80"
+  default   = "8500"
 }
 
 variable "datacenter" {
