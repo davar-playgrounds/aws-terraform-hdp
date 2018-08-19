@@ -29,4 +29,9 @@ data "consul_keys" "app" {
     name    = "Name"
     path    = "${var.path_in_consul}/tags/Name"
   }
+
+  key {
+    name    = "region"
+    path    = "${var.path_in_consul}/region"
+  }
 }
