@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "${data.consul_keys.app.var.region}"
 }
 
 # Configure the Consul provider
