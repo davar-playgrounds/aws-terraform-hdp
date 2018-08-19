@@ -11,7 +11,8 @@ provider "consul" {
 resource "aws_instance" "app" {
   ami = "${data.consul_keys.app.var.ami}"
   instance_type = "${data.consul_keys.app.var.instance_type}"
-
+  key_name   = "mykey"
+  public_key = "${data.consul_keys.app.var.key_pair}"
   tags {
     Name = "${data.consul_keys.app.var.Name}"
   }
