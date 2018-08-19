@@ -34,4 +34,9 @@ data "consul_keys" "app" {
     name    = "region"
     path    = "${var.path_in_consul}/region"
   }
+
+  key {
+    name    = "key_pair"
+    path    = "${var.path_in_consul}/key_pair"
+  }
 }
