@@ -5,7 +5,7 @@ provider "aws" {
 # Configure the Consul provider
 provider "consul" {
   address    = "127.0.0.1:8500"
-  datacenter = "${data.var.datacenter}"
+  datacenter = "${var.datacenter}"
 }
 
 resource "aws_instance" "app" {
