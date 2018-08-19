@@ -4,7 +4,7 @@ provider "aws" {
 
 # Configure the Consul provider
 provider "consul" {
-  address    = "127.0.0.1:8500"
+  address    = "${var.consul_server}:${var.consul_port}"
   datacenter = "${var.datacenter}"
 }
 
