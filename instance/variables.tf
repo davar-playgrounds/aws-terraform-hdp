@@ -19,5 +19,13 @@ data "consul_keys" "app" {
     name    = "region"
     path    = "${var.path_in_consul}/region"
   }
+  key {
+    name    = "ami"
+    path    = "${var.path_in_consul}/ami_id"
+  }
 
+  key {
+    name    = "instance_type"
+    path    = "${var.path_in_consul}/instance_type"
+  }
 }
