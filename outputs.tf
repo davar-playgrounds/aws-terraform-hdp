@@ -1,3 +1,3 @@
 output "ip" {
-  value = "${app.ip.public_ip}"
+  value = "${var.datacenter}"  #"${app.ip.public_ip}"
 }
