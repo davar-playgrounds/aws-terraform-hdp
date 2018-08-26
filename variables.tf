@@ -49,4 +49,9 @@ data "consul_keys" "app" {
     name    = "subnet_id"
     path    = "${var.path_in_consul}/subnet_id"
   }
+
+  key {
+    name    = "aws_vpc"
+    path    = "${var.path_in_consul}/aws_vpc"
+  }
 }
