@@ -1,3 +1,5 @@
+# comment
+
 provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
