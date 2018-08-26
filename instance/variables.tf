@@ -28,4 +28,9 @@ data "consul_keys" "app" {
     name    = "instance_type"
     path    = "${var.path_in_consul}/instance_type"
   }
+
+  key {
+    name    = "Name"
+    path    = "${var.path_in_consul}/tags/Name"
+  }
 }
