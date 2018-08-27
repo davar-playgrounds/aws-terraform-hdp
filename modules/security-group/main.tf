@@ -2,19 +2,22 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
-module "vpc" {
-  source = "../vpc"
-}
+#module "vpc" {
+#  source = "../vpc"
+#}
 
 module "subnet" {
   source = "../subnet"
 }
 
 resource "aws_security_group" "security_group" {
-  vpc_id = "${module.vpc.vpc_id}"
+  
+  name = "Terraform Security Group"
+
+  vpc_id = "${module.subnet.vpc_id}"
 
   ingress {
-    cidr_blocks = ["${module.vpc.cidr_block}"]
+    cidr_blocks = ["${module.subnet.cidr_block}"]
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
