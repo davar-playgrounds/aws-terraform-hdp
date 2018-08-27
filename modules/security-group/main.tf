@@ -10,7 +10,7 @@ module "subnet" {
   source = "../subnet"
 }
 
-resource "aws_security_group" "security-group" {
+resource "aws_security_group" "security_group" {
   vpc_id = "${module.vpc.vpc_id}"
 
   ingress {
