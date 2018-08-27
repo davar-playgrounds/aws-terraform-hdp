@@ -7,5 +7,5 @@ provider "aws" {
 #}
 
 module "subnet" {
-  source = "../subnet"
+  source = "../module/subnet"
 }
