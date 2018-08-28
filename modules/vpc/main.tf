@@ -10,3 +10,17 @@ resource "aws_vpc" "test_vpc" {
     Name = "Terraform VPC"
   }
 }
+
+resource "consul_keys" "app" {
+  datacenter = "dc1"
+
+  key {
+    path = "test/master/aws/test-instance/aws_vpc"
+    value = "${aws_vpc.test_vpc.id}"
+  }
+
+  key {
+    path = "test/master/aws/test-instance/bla"
+    value = "BLAAA"
+  }
+}
