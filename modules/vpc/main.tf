@@ -20,7 +20,7 @@ resource "consul_keys" "app" {
   }
 
   key {
-    path = "test/master/aws/test-instance/bla"
-    value = "BLAAA"
+    path = "test/master/aws/test-instance/cidr_block"
+    value = "${aws_vpc.test_vpc.cidr_block}"
   }
 }

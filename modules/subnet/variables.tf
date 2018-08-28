@@ -16,4 +16,14 @@ data "consul_keys" "app" {
     name    = "region"
     path    = "${var.path_in_consul}/region"
   }
+
+  key {
+    name    = "vpc_id"
+    path    = "${var.path_in_consul}/aws_vpc"
+  }
+
+  key {
+    name    = "cidr_block"
+    path    = "${var.path_in_consul}/cidr_block"
+  }
 }
