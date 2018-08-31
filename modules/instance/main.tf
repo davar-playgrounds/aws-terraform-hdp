@@ -13,7 +13,7 @@ resource "aws_instance" "test_instance" {
 }
 
 resource "consul_keys" "app" {
-  datacenter = "${datacenter}"
+  datacenter = "${var.datacenter}"
 
   key {
     path = "test/master/aws/test-instance/instance_id"
