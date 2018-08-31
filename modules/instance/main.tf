@@ -19,4 +19,14 @@ resource "consul_keys" "app" {
     path = "test/master/aws/test-instance/instance_id"
     value = "${aws_instance.test_instance.id}"
   }
+
+  key {
+    path = "test/master/aws/test-instance/public_ip"
+    value = "${aws_instance.test_instance.public_ip}"
+  }
+
+  key {
+    path = "test/master/aws/test-instance/public_dns"
+    value = "${aws_instance.test_instance.public_dns}"
+  }
 }
