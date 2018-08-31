@@ -11,3 +11,12 @@ resource "aws_instance" "app" {
     Name = "${data.consul_keys.app.var.Name}"
   }
 }
+
+resource "consul_keys" "app" {
+  datacenter = "${datacenter}"
+
+  key {
+    path = "test/master/aws/test-instance/subnet_id"
+    value = "${aws_subnet.test_subnet.id}"
+  }
+}
