@@ -16,11 +16,10 @@ resource "aws_subnet" "test_subnet" {
 }
 
 resource "consul_keys" "app" {
-  datacenter = "dc1"
+  datacenter = "${var.datacenter}"
 
   key {
     path = "test/master/aws/test-instance/subnet_id"
     value = "${aws_subnet.test_subnet.id}"
   }
 }
-

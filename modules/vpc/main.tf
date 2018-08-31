@@ -12,7 +12,7 @@ resource "aws_vpc" "test_vpc" {
 }
 
 resource "consul_keys" "app" {
-  datacenter = "dc1"
+  datacenter = "${var.datacenter}"
 
   key {
     path = "test/master/aws/test-instance/aws_vpc"
