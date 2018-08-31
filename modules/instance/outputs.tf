@@ -1,7 +1,7 @@
 output "instance id" {
-  value = "${aws_instance.app.id}"
+  value = "${aws_instance.test_instance.id}"
 }
 
 output "public_ip" {
-  value = "${aws_instance.app.public_ip}"
+  value = "${aws_instance.test_instance.public_ip}"
 }
