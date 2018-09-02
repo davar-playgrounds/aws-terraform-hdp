@@ -2,9 +2,9 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
-module "subnet" {
-  source = "../subnet"
-}
+#module "subnet" {
+#  source = "../subnet"
+#}
 
 resource "aws_security_group" "security_group" {
 
