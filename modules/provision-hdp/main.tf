@@ -7,13 +7,15 @@ resource "null_resource" "clone_hdp_repo" {
 
 # add install hdp depends_on
 data "template_file" "ansible_hosts" {
-  template = "${file("${path.module}/resources/templates/ansible-hosts")}"
-  count    = "${data.consul_keys.mine.var.count}"
+  template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
+  #count    = "${data.consul_keys.mine.var.count}"
 
   vars {
-    hostname     = "${local.hostnames[count.index]}"
-    username     = "${data.consul_keys.mine.var.template_user}"
-    password     = "${data.consul_keys.mine.var.template_password}"
-    ipv4_address = "${local.public_ips[count.index]}"
+    hostname     = "${data.consul_keys.app.var.public_ip}"
   }
+}
+
+resource "local_file" "ansible_hosts_inventory" {
+  content  = "${data.template_file.ansible_hosts.rendered}"
+  filename = "${local.workdir}/ansible-hosts"
 }
