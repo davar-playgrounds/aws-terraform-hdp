@@ -35,4 +35,8 @@ data "consul_keys" "app" {
     name    = "security_group_name"
     path    = "${var.path_in_consul}/security_group_name"
   }
+  key {
+    name    = "availability_zone"
+    path    = "${var.path_in_consul}/availability_zone"
+  }
 }

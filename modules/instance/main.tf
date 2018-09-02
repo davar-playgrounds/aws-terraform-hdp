@@ -7,8 +7,8 @@ resource "aws_instance" "test_instance" {
   ami = "${data.consul_keys.app.var.ami}"
   #image_id = "${data.consul_keys.app.var.ami}"
   instance_type = "${data.consul_keys.app.var.instance_type}"
-  security_groups = ["aws_security_group.terraform-security-group.id"]
-  #availability_zone = "${data.consul_keys.app.var.availability_zone}"
+  security_groups = ["${data.consul_keys.app.var.security_group_name}"]
+  availability_zone = "${data.consul_keys.app.var.availability_zone}"
   #key_name = "${data.consul_keys.app.var.Name}"
 
   tags {
