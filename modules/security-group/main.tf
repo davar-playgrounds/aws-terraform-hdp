@@ -27,4 +27,9 @@ resource "consul_keys" "app" {
     path = "test/master/aws/test-instance/security_group"
     value = "${aws_security_group.security_group.id}"
   }
+
+  key {
+    path = "test/master/aws/test-instance/security_group_name"
+    value = "${aws_security_group.security_group.name}"
+  }
 }
