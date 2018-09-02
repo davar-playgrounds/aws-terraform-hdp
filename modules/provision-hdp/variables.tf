@@ -1,3 +1,7 @@
+locals {
+  workdir = "${path.cwd}"
+}
+
 variable "path_in_consul" {
   default   = "test/master/aws/test-instance"
 }
