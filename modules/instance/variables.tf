@@ -32,8 +32,8 @@ data "consul_keys" "app" {
     path    = "${var.path_in_consul}/tags/Name"
   }
   key {
-    name    = "security_group_name"
-    path    = "${var.path_in_consul}/security_group_name"
+    name    = "security_group"
+    path    = "${var.path_in_consul}/security_group"
   }
   key {
     name    = "availability_zone"
