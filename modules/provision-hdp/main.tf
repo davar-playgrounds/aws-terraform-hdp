@@ -11,7 +11,7 @@ data "template_file" "ansible_hosts" {
   #count    = "${data.consul_keys.mine.var.count}"
 
   vars {
-    hostname     = "${data.consul_keys.app.var.public_ip}"
+    master-host = "${data.consul_keys.app.var.public_ip}"
   }
 }
 
