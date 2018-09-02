@@ -19,3 +19,12 @@ resource "aws_security_group" "security_group" {
     protocol    = "tcp"
   }
 }
+
+resource "consul_keys" "app" {
+  datacenter = "${var.datacenter}"
+
+  key {
+    path = "test/master/aws/test-instance/security_group"
+    value = "${aws_security_group.security_group.id}"
+  }
+}

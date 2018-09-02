@@ -23,14 +23,16 @@ data "consul_keys" "app" {
     name    = "ami"
     path    = "${var.path_in_consul}/ami_id"
   }
-
   key {
     name    = "instance_type"
     path    = "${var.path_in_consul}/instance_type"
   }
-
   key {
     name    = "Name"
     path    = "${var.path_in_consul}/tags/Name"
+  }
+  key {
+    name    = "security_group"
+    path    = "${var.path_in_consul}/security_group"
   }
 }
