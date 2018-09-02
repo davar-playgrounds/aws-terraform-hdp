@@ -39,4 +39,8 @@ data "consul_keys" "app" {
     name    = "availability_zone"
     path    = "${var.path_in_consul}/availability_zone"
   }
+  key {
+    name    = "subnet_id"
+    path    = "${var.path_in_consul}/subnet_id"
+  }
 }
