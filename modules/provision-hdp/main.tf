@@ -5,7 +5,6 @@ resource "null_resource" "clone_hdp_repo" {
   }
 }
 
-# add install hdp depends_on
 data "template_file" "ansible_hosts" {
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
   #count    = "${data.consul_keys.mine.var.count}"
@@ -19,3 +18,6 @@ resource "local_file" "ansible_hosts_inventory" {
   content  = "${data.template_file.ansible_hosts.rendered}"
   filename = "${local.workdir}/ansible-hosts"
 }
+
+#TO-DO
+# run ansible-hortonworks - depends on both above
