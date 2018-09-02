@@ -12,7 +12,7 @@ variable "datacenter" {
 }
 
 variable "security_group_name" {
-  default = "Terraform Security Group"
+  default = "terraform-security-group"
 }
 
 data "consul_keys" "app" {
