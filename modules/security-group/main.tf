@@ -6,7 +6,7 @@ provider "aws" {
 #  source = "../subnet"
 #}
 
-resource "aws_security_group" "${var.security_group_name}" {
+resource "aws_security_group" "terraform-security-group" {
 
   name = "${var.security_group_name}"
 
@@ -25,11 +25,11 @@ resource "consul_keys" "app" {
 
   key {
     path = "test/master/aws/test-instance/security_group"
-    value = "${aws_security_group."${var.security_group_name}".id}"
+    value = "${aws_security_group.terraform-security-group.id}"
   }
 
   key {
     path = "test/master/aws/test-instance/security_group_name"
-    value = "${aws_security_group."${var.security_group_name}".name}"
+    value = "${aws_security_group.terraform-security-group.name}"
   }
 }
