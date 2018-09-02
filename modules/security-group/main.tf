@@ -7,11 +7,8 @@ provider "aws" {
 #}
 
 resource "aws_security_group" "terraform-security-group" {
-
   name = "${var.security_group_name}"
-
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
-
   ingress {
     cidr_blocks = ["${data.consul_keys.app.var.cidr_block}"]
     from_port   = 80
