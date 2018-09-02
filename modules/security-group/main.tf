@@ -25,11 +25,11 @@ resource "consul_keys" "app" {
 
   key {
     path = "test/master/aws/test-instance/security_group"
-    value = "${aws_security_group.security_group.id}"
+    value = "${aws_security_group."${var.security_group_name}".id}"
   }
 
   key {
     path = "test/master/aws/test-instance/security_group_name"
-    value = "${aws_security_group.security_group.name}"
+    value = "${aws_security_group."${var.security_group_name}".name}"
   }
 }
