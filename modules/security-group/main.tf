@@ -6,7 +6,7 @@ provider "aws" {
 #  source = "../subnet"
 #}
 
-resource "aws_security_group" "security_group" {
+resource "aws_security_group" "${var.security_group_name}" {
 
   name = "${var.security_group_name}"
 
