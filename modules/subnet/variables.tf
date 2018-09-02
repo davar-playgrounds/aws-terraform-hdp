@@ -19,7 +19,7 @@ data "consul_keys" "app" {
 
   key {
     name    = "vpc_id"
-    path    = "${var.path_in_consul}/aws_vpc"
+    path    = "${var.path_in_consul}/vpc_id"
   }
 
   key {

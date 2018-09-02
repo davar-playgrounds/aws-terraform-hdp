@@ -15,7 +15,7 @@ resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
   key {
-    path = "test/master/aws/test-instance/aws_vpc"
+    path = "test/master/aws/test-instance/vpc_id"
     value = "${aws_vpc.test_vpc.id}"
   }
 
