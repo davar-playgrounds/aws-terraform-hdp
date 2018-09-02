@@ -1,5 +1,5 @@
 locals {
-  workdir = "${path.cwd}"
+  workdir = "${path.cwd}/output"
 }
 
 variable "path_in_consul" {
