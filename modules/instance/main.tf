@@ -20,16 +20,16 @@ resource "consul_keys" "app" {
 
   key {
     path = "test/master/aws/test-instance/instance_id_namenode"
-    value = "${aws_instance.test_instance.id[0]}"
+    value = "${aws_instance.test_instance.*.id[0]}"
   }
 
   key {
     path = "test/master/aws/test-instance/public_ip_namenode"
-    value = "${aws_instance.test_instance.public_ip[0]}"
+    value = "${aws_instance.test_instance.*.public_ip[0]}"
   }
 
   key {
     path = "test/master/aws/test-instance/public_dns_namenode"
-    value = "${aws_instance.test_instance.public_dns[0]}"
+    value = "${aws_instance.test_instance.*.public_dns[0]}"
   }
 }
