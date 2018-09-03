@@ -19,13 +19,13 @@ resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
   key {
-    path = "test/master/aws/test-instance/instance_id"
-    value = "${aws_instance.test_instance.id}"
+    path = "test/master/aws/test-instance/instance_id_namenode"
+    value = "${aws_instance.test_instance.id[0]}"
   }
 
   key {
-    path = "test/master/aws/test-instance/public_ip"
-    value = "${aws_instance.test_instance.public_ip}"
+    path = "test/master/aws/test-instance/public_ip_namenode"
+    value = "${aws_instance.test_instance.public_ip[0]}"
   }
 
   key {
