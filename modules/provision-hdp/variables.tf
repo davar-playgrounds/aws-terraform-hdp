@@ -8,7 +8,11 @@ variable "path_in_consul" {
 
 data "consul_keys" "app" {
   key {
-    name    = "public_dns"
-    path    = "${var.path_in_consul}/public_dns"
+    name    = "public_dns_namenode"
+    path    = "${var.path_in_consul}/public_dns_namenode"
+  }
+  key {
+    name    = "public_dns_datanode"
+    path    = "${var.path_in_consul}/public_dns_datanode"
   }
 }

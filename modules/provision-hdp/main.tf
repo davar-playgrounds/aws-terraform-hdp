@@ -10,7 +10,8 @@ data "template_file" "ansible_hosts" {
   #count    = "${data.consul_keys.mine.var.count}"
 
   vars {
-    master-host = "${data.consul_keys.app.var.public_dns}"
+    master-host = "${data.consul_keys.app.var.public_dns_namenode}"
+    slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
   }
 }
 
