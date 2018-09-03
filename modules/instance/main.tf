@@ -3,14 +3,12 @@ provider "aws" {
 }
 
 resource "aws_instance" "test_instance" {
-#resource "aws_launch_configuration" "test_instance" {
+  count = 2
   ami = "${data.consul_keys.app.var.ami}"
-  #image_id = "${data.consul_keys.app.var.ami}"
   instance_type = "${data.consul_keys.app.var.instance_type}"
   subnet_id = "${data.consul_keys.app.var.subnet_id}"
   security_groups = ["${data.consul_keys.app.var.security_group}"]
   availability_zone = "${data.consul_keys.app.var.availability_zone}"
-  #key_name = "${data.consul_keys.app.var.Name}"
 
   tags {
     Name = "${data.consul_keys.app.var.Name}"
