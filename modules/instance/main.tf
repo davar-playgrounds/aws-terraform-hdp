@@ -29,7 +29,7 @@ resource "consul_keys" "app" {
   }
 
   key {
-    path = "test/master/aws/test-instance/public_dns"
-    value = "${aws_instance.test_instance.public_dns}"
+    path = "test/master/aws/test-instance/public_dns_namenode"
+    value = "${aws_instance.test_instance.public_dns[0]}"
   }
 }
