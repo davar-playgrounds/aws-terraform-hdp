@@ -22,12 +22,12 @@ resource "local_file" "ansible_hosts_inventory" {
 
 resource "null_resource" "passwordless_ssh" {
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/passwordless-ssh.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/passwordless-ssh.yml --inventory=${local.workdir}/output/ansible-hosts"
   }
 }
 
 resource "null_resource" "prepare_nodes" {
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -v -e cloud_name=static ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=${local.workdir}/ansible-hosts --extra-vars=${local.workdir}/resources/hdp-cluster-minimal.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -v -e cloud_name=static ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=${local.workdir}/output/ansible-hosts --extra-vars=${local.workdir}/resources/hdp-cluster-minimal.yml"
   }
 }
