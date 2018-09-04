@@ -17,7 +17,7 @@ data "template_file" "ansible_hosts" {
 
 resource "local_file" "ansible_hosts_inventory" {
   content  = "${data.template_file.ansible_hosts.rendered}"
-  filename = "${local.workdir}/ansible-hosts"
+  filename = "${local.workdir}/output/ansible-hosts"
 }
 
 #TO-DO
