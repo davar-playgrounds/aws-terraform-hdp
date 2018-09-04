@@ -22,3 +22,8 @@ resource "local_file" "ansible_hosts_inventory" {
 
 #TO-DO
 # run ansible-hortonworks - depends on both above
+resource "null_resource" "prepare_nodes" {
+  provisioner "local-exec" {
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -v -e cloud_name=static playbooks/prepare_nodes.yml --inventory=${local.workdir}/ansible-hosts --extra-vars=${local.workdir}/resources/hdp-cluster-minimal.yml"
+  }
+}
