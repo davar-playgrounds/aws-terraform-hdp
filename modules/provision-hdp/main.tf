@@ -20,8 +20,12 @@ resource "local_file" "ansible_hosts_inventory" {
   filename = "${local.workdir}/output/ansible-hosts"
 }
 
-#TO-DO
-# run ansible-hortonworks - depends on both above
+resource "null_resource" "passwordless_ssh" {
+  provisioner "local-exec" {
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/passwordless-ssh.yml"
+  }
+}
+
 resource "null_resource" "prepare_nodes" {
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -v -e cloud_name=static ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=${local.workdir}/ansible-hosts --extra-vars=${local.workdir}/resources/hdp-cluster-minimal.yml"
