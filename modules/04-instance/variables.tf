@@ -14,6 +14,10 @@ variable "datacenter" {
   default   = "dc1"
 }
 
+variable "no_instances" {
+  default = "2"
+}
+
 data "consul_keys" "app" {
   key {
     name    = "region"

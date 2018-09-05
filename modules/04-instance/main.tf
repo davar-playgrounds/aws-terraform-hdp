@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "test_instance" {
-  count = 2
+  count = "${var.no_instances}"
   ami = "${data.consul_keys.app.var.ami}"
   instance_type = "${data.consul_keys.app.var.instance_type}"
   subnet_id = "${data.consul_keys.app.var.subnet_id}"
