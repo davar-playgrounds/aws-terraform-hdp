@@ -32,4 +32,8 @@ data "consul_keys" "app" {
     name    = "main_route_table_id"
     path    = "${var.path_in_consul}/main_route_table_id"
   }
+  key {
+    name    = "igw_id"
+    path    = "${var.path_in_consul}/igw_id"
+  }
 }

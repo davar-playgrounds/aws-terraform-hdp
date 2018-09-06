@@ -15,6 +15,7 @@ resource "aws_subnet" "test_subnet" {
 */
 resource "aws_route" "route" {
   route_table_id            = "${data.consul_keys.app.var.main_route_table_id}"
+  gateway_id                = "${data.consul_keys.app.var.igw_id}"
   destination_cidr_block    = "0.0.0.0/0"
   #depends_on                = ["aws_route_table.testing"]
 }
