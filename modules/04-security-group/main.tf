@@ -15,6 +15,13 @@ resource "aws_security_group" "terraform-security-group" {
     to_port     = 80
     protocol    = "tcp"
   }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+  }
 }
 
 resource "consul_keys" "app" {
