@@ -9,6 +9,8 @@ resource "aws_instance" "test_instance" {
   subnet_id = "${data.consul_keys.app.var.subnet_id}"
   security_groups = ["${data.consul_keys.app.var.security_group}"]
   availability_zone = "${data.consul_keys.app.var.availability_zone}"
+  key_name = "mykeypair"
+  associate_public_ip_address = "true" 
 
   tags {
     Name = "${data.consul_keys.app.var.Name}"
