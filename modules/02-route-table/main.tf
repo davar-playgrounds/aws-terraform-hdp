@@ -4,6 +4,7 @@ provider "aws" {
 
 resource "aws_route_table" "terraform_route_table" {
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
+  main = "yes"
 
   route {
     cidr_block = "0.0.0.0/0"# "${data.consul_keys.app.var.cidr_block}"
