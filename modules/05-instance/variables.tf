@@ -37,7 +37,7 @@ data "consul_keys" "app" {
   }
   key {
     name    = "security_group"
-    path    = "${var.path_in_consul}/security_group"
+    path    = "${var.path_in_consul}/default_security_group_id"
   }
   key {
     name    = "availability_zone"
