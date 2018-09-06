@@ -10,10 +10,13 @@ variable "consul_port" {
 variable "datacenter" {
   default   = "dc1"
 }
-
 variable "name" {
   default = "Terraform Route Table"
 }
+variable "cidr_block_all" {
+  default = "0.0.0.0/0"
+}
+
 
 data "consul_keys" "app" {
   key {

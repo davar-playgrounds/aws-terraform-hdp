@@ -7,7 +7,7 @@ resource "aws_route_table" "terraform_route_table" {
   main = "yes"
 
   route {
-    cidr_block = "0.0.0.0/0"# "${data.consul_keys.app.var.cidr_block}"
+    cidr_block = "${var.cidr_block_all}"# "${data.consul_keys.app.var.cidr_block}"
     gateway_id = "${data.consul_keys.app.var.igw_id}"
   }
 
