@@ -17,6 +17,10 @@ variable "name" {
 
 data "consul_keys" "app" {
   key {
+    name    = "region"
+    path    = "${var.path_in_consul}/region"
+  }
+  key {
     name    = "vpc_id"
     path    = "${var.path_in_consul}/vpc_id"
   }
