@@ -2,13 +2,10 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
-#module "subnet" {
-#  source = "../subnet"
-#}
-
 resource "aws_security_group" "terraform-security-group" {
-  name = "${var.security_group_name}"
+  #name = "${var.security_group_name}"
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
+  id = "${data.consul_keys.app.var.default_security_group_id}"
   ingress {
     cidr_blocks = ["${data.consul_keys.app.var.cidr_block}"]
     from_port   = 80

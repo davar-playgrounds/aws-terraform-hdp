@@ -20,14 +20,17 @@ data "consul_keys" "app" {
     name    = "region"
     path    = "${var.path_in_consul}/region"
   }
-
   key {
     name    = "cidr_block"
     path    = "${var.path_in_consul}/cidr_block"
   }
-
   key {
     name    = "vpc_id"
     path    = "${var.path_in_consul}/vpc_id"
   }
+  key {
+    name    = "default_security_group_id"
+    path    = "${var.path_in_consul}/default_security_group_id"
+  }
+
 }
