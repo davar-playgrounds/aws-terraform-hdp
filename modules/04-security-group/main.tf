@@ -1,7 +1,7 @@
 provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
-
+/*
 resource "aws_security_group" "terraform-security-group" {
   #name = "${var.security_group_name}"
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
@@ -18,6 +18,18 @@ resource "aws_security_group" "terraform-security-group" {
     to_port     = 22
     protocol    = "tcp"
   }
+}
+*/
+
+resource "aws_security_group_rule" "test_rule" {
+  type        = "ingress"
+  description = "Test rule"
+  from_port   = "22"
+  to_port     = "22"
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = "${data.consult_keys.app.var.default_security_group_id}"
 }
 
 resource "consul_keys" "app" {
