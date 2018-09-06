@@ -29,6 +29,6 @@ resource "null_resource" "passwordless_ssh" {
 resource "null_resource" "prepare_nodes" {
   depends_on = ["null_resource.passwordless_ssh"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -e cloud_name=static ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=${local.workdir}/output/ansible-hosts --extra-vars=${local.workdir}/resources/hdp-cluster-minimal.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=\"@${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${local.workdir}/resources/hdp-cluster-minimal.yml\""
   }
 }
