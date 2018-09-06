@@ -18,9 +18,16 @@ resource "consul_keys" "app" {
     path = "test/master/aws/test-instance/vpc_id"
     value = "${aws_vpc.test_vpc.id}"
   }
-
   key {
     path = "test/master/aws/test-instance/cidr_block"
     value = "${aws_vpc.test_vpc.cidr_block}"
+  }
+  key {
+    path = "test/master/aws/test-instance/main_route_table_id"
+    value = "${aws_vpc.test_vpc.main_route_table_id}"
+  }
+  key {
+    path = "test/master/aws/test-instance/default_security_group_id"
+    value = "${aws_vpc.test_vpc.default_security_group_id}"
   }
 }
