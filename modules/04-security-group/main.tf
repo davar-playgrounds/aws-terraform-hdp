@@ -29,19 +29,19 @@ resource "aws_security_group_rule" "test_rule" {
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = "${data.consult_keys.app.var.default_security_group_id}"
+  security_group_id = "${data.consul_keys.app.var.default_security_group_id}"
 }
 
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
   key {
-    path = "test/master/aws/test-instance/security_group"
-    value = "${aws_security_group.terraform-security-group.id}"
+    path = "test/master/aws/test-instance/security_group_rule_id"
+    value = "${aws_security_group_rule.test_rule.id}"
   }
 
-  key {
+  /*key {
     path = "test/master/aws/test-instance/security_group_name"
-    value = "${aws_security_group.terraform-security-group.name}"
-  }
+    value = "${aws_security_group_rule.terraform-security-group.name}"
+  }*/
 }
