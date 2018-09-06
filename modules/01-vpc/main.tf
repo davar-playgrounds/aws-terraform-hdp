@@ -30,4 +30,8 @@ resource "consul_keys" "app" {
     path = "test/master/aws/test-instance/default_security_group_id"
     value = "${aws_vpc.test_vpc.default_security_group_id}"
   }
+  key {
+    path = "test/master/aws/test-instance/default_network_acl_id"
+    value = "${aws_vpc.test_vpc.default_network_acl_id}"
+  }
 }
