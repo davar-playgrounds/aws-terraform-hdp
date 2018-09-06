@@ -14,6 +14,10 @@ variable "datacenter" {
   default   = "dc1"
 }
 
+variable "cidr_block" {
+  default = "10.0.0.0/24"
+}
+
 data "consul_keys" "app" {
   key {
     name    = "region"

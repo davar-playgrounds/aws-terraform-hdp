@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_vpc" "test_vpc" {
-  cidr_block = "${var.cidr_block}"
+  cidr_block = "10.0.0.0/24"
   enable_dns_hostnames = true
 
   tags {
