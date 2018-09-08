@@ -23,6 +23,6 @@ resource "consul_keys" "app" {
 
   key {
     path = "test/master/aws/test-instance/terraform_route_table"
-    value = "${aws_route_table.terraform_route_table.id}"
+    value = "${aws_route.terraform_route_table.id}"
   }
 }
