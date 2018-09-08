@@ -5,3 +5,4 @@
       pip:
         name: Jinja2
         state: latest
+        extra_args: --user
