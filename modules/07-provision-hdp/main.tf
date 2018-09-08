@@ -33,7 +33,7 @@ resource "null_resource" "install-pip" {
 }
 
 resource "null_resource" "install_python_packages" {
-  depends_on = ["null_resource.update_jinja2"]
+  depends_on = ["null_resource.install-pip"]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/install-python-packages.yml --inventory=${local.workdir}/output/ansible-hosts"
   }
