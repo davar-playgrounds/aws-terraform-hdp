@@ -14,6 +14,9 @@ variable "cidr_block" {
   default = "10.0.0.0/24"
 }
 
+variable "vpc_name" {
+  default = "Terraform VPC"
+}
 variable "igw_name" {
   default = "Terraform IGW"
 }

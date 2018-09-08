@@ -11,10 +11,7 @@ variable "datacenter" {
   default   = "dc1"
 }
 
-variable "vpc_name" {
-  default = "Terraform VPC"
-}
-variable "igw_name" {
+variable "name" {
   default = "Terraform IGW"
 }
 
