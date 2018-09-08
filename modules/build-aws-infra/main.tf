@@ -14,7 +14,7 @@ resource "aws_vpc" "test_vpc" {
 
 # gateway
 resource "aws_internet_gateway" "terraform_igw" {
-  depends_on = ["aws_vpc"."test_vpc"]
+  depends_on = ["aws_vpc.test_vpc"]
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
 
   tags {
