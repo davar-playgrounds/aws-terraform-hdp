@@ -15,7 +15,6 @@ data "template_file" "ansible_hosts" {
 }
 
 resource "local_file" "ansible_hosts_inventory" {
-  depends_on = ["template_file.ansible_hosts"]
   content  = "${data.template_file.ansible_hosts.rendered}"
   filename = "${local.workdir}/output/ansible-hosts"
 }
