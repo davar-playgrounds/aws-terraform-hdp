@@ -2,6 +2,10 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
+module "vpc" {
+  source = "../01-vpc"
+}
+
 resource "aws_internet_gateway" "terraform_igw" {
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
 

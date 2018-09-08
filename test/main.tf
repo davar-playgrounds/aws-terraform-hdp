@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "../modules/01-vpc"
+  source = "../01-vpc"
 }
 
 module "gateway" {
