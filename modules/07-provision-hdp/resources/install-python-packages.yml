@@ -6,3 +6,8 @@
         name: Jinja2
         state: latest
         extra_args: --user
+    - name: install setuptools
+      pip:
+        name: setuptools
+        state: latest
+        extra_args: --upgrade
