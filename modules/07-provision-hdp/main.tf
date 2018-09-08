@@ -25,15 +25,15 @@ resource "null_resource" "passwordless_ssh" {
   }
 }
 
-resource "null_resource" "install-pip" {
+/*resource "null_resource" "install-pip" {
   depends_on = ["null_resource.passwordless_ssh"]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/install-pip.yml --inventory=${local.workdir}/output/ansible-hosts"
   }
-}
+}*/
 
 resource "null_resource" "install_python_packages" {
-  depends_on = ["null_resource.install-pip"]
+  #depends_on = ["null_resource.install-pip"]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/install-python-packages.yml --inventory=${local.workdir}/output/ansible-hosts"
   }

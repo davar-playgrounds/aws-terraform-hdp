@@ -1,26 +1,8 @@
 ---
-- hosts: all
+- hosts: localhost
   tasks:
     - name: install Python packages
       pip:
         name: Jinja2
         state: latest
-        extra_args: --user
-      with_items:
-        - gcc
-        - gcc-c++
-        - python-virtualenv
-        - python-pip
-        - python-devel
-        - libffi-devel
-        - openssl-devel
-        - libyaml-devel
-        - sshpass
-        - git
-        - vim-enhanced
-    - name: install setuptools
-      pip:
-        name: setuptools
-        state: latest
-        extra_args: --upgrade
         extra_args: --user
