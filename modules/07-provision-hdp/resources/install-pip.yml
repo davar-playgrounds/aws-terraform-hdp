@@ -1,9 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: install pip
-      easy_install:
-        name: pip
-        state: latest
-      become: yes
-      become_user: root
