@@ -1,7 +1,7 @@
 ---
 - hosts: all
   tasks:
-    - name: install the package, force upgrade
+    - name: install Jinja2 or force upgrade
       pip:
         name: Jinja2
         state: latest

@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+    - name: install pip
+      easy_install:
+        name: pip
+        state: latest
