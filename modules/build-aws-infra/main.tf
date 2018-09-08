@@ -8,7 +8,7 @@ resource "aws_vpc" "test_vpc" {
   enable_dns_hostnames = true
 
   tags {
-    Name = "Terraform VPC"
+    Name = "${var.vpc_name}"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "terraform_igw" {
   vpc_id = "${data.consul_keys.app.var.vpc_id}"
 
   tags {
-    Name = "${var.name}"
+    Name = "${var.igw_name}"
   }
 }
 

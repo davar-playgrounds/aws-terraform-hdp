@@ -14,6 +14,10 @@ variable "cidr_block" {
   default = "10.0.0.0/24"
 }
 
+variable "igw_name" {
+  default = "Terraform IGW"
+}
+
 data "consul_keys" "app" {
   key {
     name    = "region"

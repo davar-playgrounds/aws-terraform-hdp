@@ -11,9 +11,13 @@ variable "datacenter" {
   default   = "dc1"
 }
 
-variable "name" {
+variable "vpc_name" {
+  default = "Terraform VPC"
+}
+variable "igw_name" {
   default = "Terraform IGW"
 }
+
 
 data "consul_keys" "app" {
   key {
