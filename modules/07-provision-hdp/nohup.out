@@ -1,0 +1,7 @@
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":30,"msg":"Adding /tmp/git2consul.json to KV git2consul/config as: \n{\n  \"version\": \"1.0\",\n  \"repos\" : [{\n    \"name\" : \"test\",\n    \"url\" : \"https://github.com/markokole/git2consul-data.git\",\n\"expand_keys\": true,\n    \"expand_keys_diff\": true,\n    \"ignore_file_extension\": true,\n    \"branches\" : [\"master\"],\n    \"hooks\": [{\n      \"type\" : \"polling\",\n      \"interval\" : \"1\"\n    }]\n  }]\n}\n","time":"2018-09-08T06:40:06.013Z","v":0}
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":30,"msg":"git2consul is running","time":"2018-09-08T06:40:06.328Z","v":0}
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":30,"msg":"Initting repo test","time":"2018-09-08T06:40:06.331Z","v":0}
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":30,"msg":"Initting branch /tmp/test /tmp/test/master","time":"2018-09-08T06:40:06.331Z","v":0}
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":40,"msg":"Purging branch cache /tmp/test/master for branch master in repo test","time":"2018-09-08T06:40:06.332Z","v":0}
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":30,"msg":"Initialized branch master from test","time":"2018-09-08T06:40:07.203Z","v":0}
+{"name":"git2consul","hostname":"ansible.control","pid":16312,"level":30,"msg":"Loaded repo test","time":"2018-09-08T06:40:07.204Z","v":0}
