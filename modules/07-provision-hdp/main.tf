@@ -7,7 +7,6 @@ resource "null_resource" "clone_hdp_repo" {
 
 data "template_file" "ansible_hosts" {
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
-  #count    = "${data.consul_keys.mine.var.count}"
 
   vars {
     master-host = "${data.consul_keys.app.var.public_dns_namenode}"
@@ -16,6 +15,7 @@ data "template_file" "ansible_hosts" {
 }
 
 resource "local_file" "ansible_hosts_inventory" {
+  depends_on = ["template_file.ansible_hosts"]
   content  = "${data.template_file.ansible_hosts.rendered}"
   filename = "${local.workdir}/output/ansible-hosts"
 }
@@ -27,6 +27,7 @@ resource "null_resource" "passwordless_ssh" {
 }
 
 resource "null_resource" "install-pip" {
+  depends_on = ["null_resource.passwordless_ssh"]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/install-pip.yml --inventory=${local.workdir}/output/ansible-hosts"
   }
@@ -40,7 +41,7 @@ resource "null_resource" "install_python_packages" {
 }
 
 resource "null_resource" "prepare_nodes" {
-  depends_on = ["null_resource.passwordless_ssh"]
+  depends_on = ["null_resource.install_python_packages"]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}/resources/hdp-cluster-minimal.yml\""
   }
