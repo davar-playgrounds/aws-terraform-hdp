@@ -26,6 +26,12 @@ resource "null_resource" "passwordless_ssh" {
   }
 }
 
+resource "null_resource" "update_jinja2" {
+  provisioner "local-exec" {
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/update-jinja2.yml --inventory=${local.workdir}/output/ansible-hosts"
+  }
+}
+
 resource "null_resource" "prepare_nodes" {
   depends_on = ["null_resource.passwordless_ssh"]
   provisioner "local-exec" {
