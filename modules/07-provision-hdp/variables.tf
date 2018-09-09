@@ -6,9 +6,10 @@ variable "path_in_consul" {
   default   = "test/master/aws/test-instance"
 }
 
+/*
 variable "hdp_spec" {
   default = "/resources/hdp-cluster-minimal.yml"
-}
+}*/
 
 data "consul_keys" "app" {
   key {
@@ -18,5 +19,9 @@ data "consul_keys" "app" {
   key {
     name    = "public_dns_datanode"
     path    = "${var.path_in_consul}/public_dns_datanode"
+  }
+  key {
+    name    = "hdp_spec"
+    path    = "${var.path_in_consul}/hdp_spec"
   }
 }
