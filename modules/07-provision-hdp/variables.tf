@@ -7,7 +7,7 @@ variable "path_in_consul" {
 }
 
 variable "hdp_spec" {
-  default = "@${local.workdir}/resources/hdp-cluster-minimal.yml"
+  default = "/resources/hdp-cluster-minimal.yml"
 }
 
 data "consul_keys" "app" {
