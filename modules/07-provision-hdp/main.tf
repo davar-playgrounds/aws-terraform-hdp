@@ -34,24 +34,25 @@ resource "null_resource" "install_python_packages" {
 resource "null_resource" "prepare_nodes" {
   depends_on = ["null_resource.install_python_packages"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${data.consul_keys.app.var.public_dns_namenode}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${data.consul_keys.app.var.hdp_spec}\""
   }
 }
-/*
+
 resource "null_resource" "install_ambari" {
   depends_on = ["null_resource.prepare_nodes"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/install_ambari.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${data.consul_keys.app.var.hdp_spec}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/install_ambari.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${data.consul_keys.app.var.hdp_spec}\""
   }
 }
 
 resource "null_resource" "configure_ambari" {
   depends_on = ["null_resource.install_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/configure_ambari.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${data.consul_keys.app.var.hdp_spec}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/configure_ambari.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${data.consul_keys.app.var.hdp_spec}\""
   }
 }
 
+/*
 resource "null_resource" "apply_blueprint" {
   depends_on = ["null_resource.configure_ambari"]
   provisioner "local-exec" {
