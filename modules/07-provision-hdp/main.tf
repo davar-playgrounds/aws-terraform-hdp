@@ -48,22 +48,20 @@ resource "null_resource" "install_ambari" {
 resource "null_resource" "configure_ambari" {
   depends_on = ["null_resource.install_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/configure_ambari.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${data.consul_keys.app.var.hdp_spec}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/configure_ambari.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${var.hdp_spec}\""
   }
 }
 
-/*
 resource "null_resource" "apply_blueprint" {
   depends_on = ["null_resource.configure_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${data.consul_keys.app.var.hdp_spec}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${var.hdp_spec}\""
   }
 }
 
 resource "null_resource" "post_install" {
   depends_on = ["null_resource.apply_blueprint"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/post_install.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${data.consul_keys.app.var.hdp_spec}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/post_install.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${var.hdp_spec}\""
   }
 }
-*/
