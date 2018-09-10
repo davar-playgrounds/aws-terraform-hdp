@@ -22,7 +22,7 @@ data "consul_keys" "app" {
   }
   key {
     name    = "hdp_spec"
-    path    = "${var.path_in_consul}/hdp_spec"
+    path    = "${var.path_in_consul}/aaa-hdp3-spec"
     default = "/resources/hdp-cluster-minimal.yml"
   }
 }

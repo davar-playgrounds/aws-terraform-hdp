@@ -34,10 +34,10 @@ resource "null_resource" "install_python_packages" {
 resource "null_resource" "prepare_nodes" {
   depends_on = ["null_resource.install_python_packages"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${data.consul_keys.app.var.hdp_spec}\""
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"${data.consul_keys.app.var.public_dns_namenode}\""
   }
 }
-
+/*
 resource "null_resource" "install_ambari" {
   depends_on = ["null_resource.prepare_nodes"]
   provisioner "local-exec" {
@@ -65,3 +65,4 @@ resource "null_resource" "post_install" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook ${local.workdir}/resources/ansible-hortonworks/playbooks/post_install.yml --inventory=\"${local.workdir}/output/ansible-hosts\" --extra-vars=\"cloud_name=static\" --extra-vars=\"@${local.workdir}${data.consul_keys.app.var.hdp_spec}\""
   }
 }
+*/
