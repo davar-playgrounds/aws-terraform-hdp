@@ -2,4 +2,4 @@
 *.terraform*
 output
 *nohup*
-*ansible-hortonworks*
+*/ansible-hortonworks*
