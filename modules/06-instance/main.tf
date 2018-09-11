@@ -20,33 +20,45 @@ resource "aws_instance" "test_instance" {
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
+  # ambari
+  key {
+    path = "test/master/aws/test-instance/instance_id_ambari"
+    value = "${aws_instance.test_instance.*.id[0]}"
+  }
+  key {
+    path = "test/master/aws/test-instance/public_ip_ambari"
+    value = "${aws_instance.test_instance.*.public_ip[0]}"
+  }
+  key {
+    path = "test/master/aws/test-instance/public_dns_ambari"
+    value = "${aws_instance.test_instance.*.public_dns[0]}"
+  }
+
+  # namenode
   key {
     path = "test/master/aws/test-instance/instance_id_namenode"
     value = "${aws_instance.test_instance.*.id[0]}"
   }
-
   key {
     path = "test/master/aws/test-instance/public_ip_namenode"
     value = "${aws_instance.test_instance.*.public_ip[0]}"
   }
-
   key {
     path = "test/master/aws/test-instance/public_dns_namenode"
     value = "${aws_instance.test_instance.*.public_dns[0]}"
   }
 
+  # datanode
   key {
     path = "test/master/aws/test-instance/instance_id_datanode"
-    value = "${aws_instance.test_instance.*.id[1]}"
+    value = "${aws_instance.test_instance.*.id[0]}"
   }
-
   key {
     path = "test/master/aws/test-instance/public_ip_datanode"
-    value = "${aws_instance.test_instance.*.public_ip[1]}"
+    value = "${aws_instance.test_instance.*.public_ip[0]}"
   }
-
   key {
     path = "test/master/aws/test-instance/public_dns_datanode"
-    value = "${aws_instance.test_instance.*.public_dns[1]}"
+    value = "${aws_instance.test_instance.*.public_dns[0]}"
   }
 }
