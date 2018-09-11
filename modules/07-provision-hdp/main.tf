@@ -12,7 +12,7 @@ data "template_file" "ansible_hosts" {
     ambari-host = "${data.consul_keys.app.var.public_dns_ambari}"
     master-host = "${data.consul_keys.app.var.public_dns_namenode}"
     slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
-    ambari-ip = "${data.consul_keys.app.var.public_dns_ambari}"
+    ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
     master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
     slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
   }

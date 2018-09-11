@@ -12,12 +12,36 @@ variable "hdp_spec" {
 }
 
 data "consul_keys" "app" {
+  # ambari
+  key {
+    name    = "public_dns_ambari"
+    path    = "${var.path_in_consul}/public_dns_ambari"
+  }
+  key {
+    name    = "public_ip_ambari"
+    path    = "${var.path_in_consul}/public_ip_ambari"
+  }
+  # namenode
   key {
     name    = "public_dns_namenode"
     path    = "${var.path_in_consul}/public_dns_namenode"
   }
   key {
+    name    = "public_ip_namenode"
+    path    = "${var.path_in_consul}/public_ip_namenode"
+  }
+  # datanode
+  key {
     name    = "public_dns_datanode"
     path    = "${var.path_in_consul}/public_dns_datanode"
   }
+  key {
+    name    = "public_ip_datanode"
+    path    = "${var.path_in_consul}/public_ip_datanode"
+  }
 }
+
+
+ambari-ip = "${data.consul_keys.app.var.public_dns_ambari}"
+master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
+slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
