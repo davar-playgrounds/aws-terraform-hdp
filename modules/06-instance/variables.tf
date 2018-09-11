@@ -47,4 +47,9 @@ data "consul_keys" "app" {
     name    = "subnet_id"
     path    = "${var.path_in_consul}/subnet_id"
   }
+  key {
+    name    = "no_instances"
+    path    = "${var.path_in_consul}/no_instances"
+    default = "2"
+  }
 }
