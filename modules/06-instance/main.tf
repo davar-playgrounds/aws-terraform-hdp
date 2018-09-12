@@ -51,14 +51,14 @@ resource "consul_keys" "app" {
   # datanode
   key {
     path = "test/master/aws/test-instance/instance_id_datanode"
-    value = "${aws_instance.test_instance.*.id[0]}"
+    value = "${aws_instance.test_instance.*.id[1]}"
   }
   key {
     path = "test/master/aws/test-instance/public_ip_datanode"
-    value = "${aws_instance.test_instance.*.public_ip[0]}"
+    value = "${aws_instance.test_instance.*.public_ip[1]}"
   }
   key {
     path = "test/master/aws/test-instance/public_dns_datanode"
-    value = "${aws_instance.test_instance.*.public_dns[0]}"
+    value = "${aws_instance.test_instance.*.public_dns[1]}"
   }
 }
