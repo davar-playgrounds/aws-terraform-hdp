@@ -3,7 +3,7 @@
 ## cluster configuration ##
 ###########################
 
-cluster_name: 'hdp-minimal'
+cluster_name: 'hdp-ranger'
 
 ambari_version: '2.6.2.2'                                 # must be the 4-part full version number
 
@@ -43,7 +43,7 @@ oraclejdk_options:                                        # only used when java 
 ## database configuration ##
 ############################
 
-database: 'embedded'                                      # can be set to 'embedded', 'postgres', 'mysql' or 'mariadb'
+database: 'mysql'                                      # can be set to 'embedded', 'postgres', 'mysql' or 'mariadb'
 database_options:
   external_hostname: ''                                   # if this is empty, Ansible will install and prepare the databases on the ambari-node
   ambari_db_name: 'ambari'
