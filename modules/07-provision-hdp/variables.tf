@@ -40,8 +40,3 @@ data "consul_keys" "app" {
     path    = "${var.path_in_consul}/public_ip_datanode"
   }
 }
-
-
-ambari-ip = "${data.consul_keys.app.var.public_dns_ambari}"
-master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
-slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
