@@ -1,5 +1,9 @@
-variable "path_in_consul" {
+variable "path_in_consul_aws" {
   default   = "test/master/aws/test-instance"
+}
+
+variable "path_in_consul_hdp" {
+  default   = "test/master/aws/hdp"
 }
 
 variable "consul_server" {
@@ -17,35 +21,34 @@ variable "datacenter" {
 data "consul_keys" "app" {
   key {
     name    = "region"
-    path    = "${var.path_in_consul}/region"
+    path    = "${var.path_in_consul_aws}/region"
   }
   key {
     name    = "ami"
-    path    = "${var.path_in_consul}/ami_id"
+    path    = "${var.path_in_consul_aws}/ami_id"
   }
   key {
     name    = "instance_type"
-    path    = "${var.path_in_consul}/instance_type"
+    path    = "${var.path_in_consul_aws}/instance_type"
   }
   key {
     name    = "Name"
-    path    = "${var.path_in_consul}/tags/Name"
+    path    = "${var.path_in_consul_aws}/tags/Name"
   }
   key {
     name    = "security_group"
-    path    = "${var.path_in_consul}/default_security_group_id"
+    path    = "${var.path_in_consul_aws}/default_security_group_id"
   }
   key {
     name    = "availability_zone"
-    path    = "${var.path_in_consul}/availability_zone"
+    path    = "${var.path_in_consul_aws}/availability_zone"
   }
   key {
     name    = "subnet_id"
-    path    = "${var.path_in_consul}/subnet_id"
+    path    = "${var.path_in_consul_aws}/subnet_id"
   }
   key {
     name    = "no_instances"
-    path    = "${var.path_in_consul}/no_instances"
-    default = "2"
+    path    = "${var.path_in_consul_hdp}/no_instances"
   }
 }
