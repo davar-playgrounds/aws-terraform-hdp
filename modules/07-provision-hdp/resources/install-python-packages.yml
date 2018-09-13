@@ -1,4 +1,11 @@
 ---
+- hosts: localhost
+  tasks:
+    - name: install jq
+      yum:
+        name: jq
+        state: latest
+
 - hosts: all
   tasks:
     - name: install pip
