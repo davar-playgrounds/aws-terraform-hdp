@@ -22,6 +22,16 @@ resource "aws_security_group_rule" "port_8080_to_world" {
   security_group_id = "${data.consul_keys.app.var.default_security_group_id}"
 }
 
+resource "aws_security_group_rule" "port_6080_to_world" {
+  type        = "ingress"
+  description = "Ranger to world"
+  from_port   = "6080"
+  to_port     = "6080"
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+  security_group_id = "${data.consul_keys.app.var.default_security_group_id}"
+}
+
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
