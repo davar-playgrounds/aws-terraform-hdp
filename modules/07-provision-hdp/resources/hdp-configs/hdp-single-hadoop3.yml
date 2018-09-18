@@ -1,14 +1,14 @@
 ---
-###########################
-## cluster configuration ##
-###########################
+#############################
+### cluster configuration ###
+#############################
 
-cluster_name: 'hdp-bigsql'
+cluster_name: 'hdp3cluster'
 
-ambari_version: '2.6.2.2'                                 # must be the 4-part full version number
+ambari_version: '2.7.0.0'                                  # must be the 4-part full version number
 
-hdp_version: '2.6.5.0'                                    # must be the 4-part full version number
-hdp_build_number: 'auto'                                  # the HDP build number from docs.hortonworks.com (if set to 'auto', Ansible will try to get it from the repository)
+hdp_version: '3.0.0.0'                                     # must be the 4-part full version number
+hdp_build_number: '1634'                                   # the HDP build number from docs.hortonworks.com (if set to 'auto', Ansible will try to get it from the repository)
 
 hdf_version: '3.1.2.0'                                    # must be the 4-part full version number
 hdf_build_number: 'auto'                                  # the HDF build number from docs.hortonworks.com (if set to 'auto', Ansible will try to get it from the repository)
@@ -43,9 +43,9 @@ oraclejdk_options:                                        # only used when java 
 ## database configuration ##
 ############################
 
-database: 'mysql'                                      # can be set to 'embedded', 'postgres', 'mysql' or 'mariadb'
+database: 'embedded'                                      # can be set to 'embedded', 'postgres', 'mysql' or 'mariadb'
 database_options:
-  external_hostname: '127.0.0.1'                                   # if this is empty, Ansible will install and prepare the databases on the ambari-node
+  external_hostname: ''                                   # if this is empty, Ansible will install and prepare the databases on the ambari-node
   ambari_db_name: 'ambari'
   ambari_db_username: 'ambari'
   ambari_db_password: 'bigdata'
@@ -121,7 +121,7 @@ blueprint_name: '{{ cluster_name }}_blueprint'            # the name of the blue
 blueprint_file: 'blueprint_dynamic.j2'                    # the blueprint JSON file - 'blueprint_dynamic.j2' is a Jinja2 template that generates the required JSON
 blueprint_dynamic:                                        # properties for the dynamic blueprint - these are only used by the 'blueprint_dynamic.j2' template to generate the JSON
   - host_group: "hdp-master"
-    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT', 'HCAT', 'TEZ_CLIENT', 'SLIDER', 'SQOOP', 'HBASE_CLIENT']
+    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT']
     services:
       - ZOOKEEPER_SERVER
       - NAMENODE
@@ -131,24 +131,16 @@ blueprint_dynamic:                                        # properties for the d
       - HISTORYSERVER
       - HIVE_SERVER
       - HIVE_METASTORE
-      - WEBHCAT_SERVER
       - AMBARI_SERVER
       - METRICS_COLLECTOR
       - METRICS_MONITOR
       - HST_SERVER
-      - HBASE_MASTER
-      - HBASE_REGIONSERVER
-      - KNOX_GATEWAY
-
-  - host_group: "hdp-slave"
-    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT', 'HCAT', 'TEZ_CLIENT', 'SLIDER', 'SQOOP', 'HBASE_CLIENT']
-    services:
+      - YARN_REGISTRY_DNS
+      - TIMELINE_READER
       - DATANODE
       - NODEMANAGER
       - METRICS_MONITOR
       - HST_AGENT
-
-
 
 
 ############################

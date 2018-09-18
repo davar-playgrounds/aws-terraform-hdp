@@ -3,7 +3,7 @@
 ## cluster configuration ##
 ###########################
 
-cluster_name: 'hdp-bigsql'
+cluster_name: 'hdp-ranger'
 
 ambari_version: '2.6.2.2'                                 # must be the 4-part full version number
 
@@ -45,7 +45,7 @@ oraclejdk_options:                                        # only used when java 
 
 database: 'mysql'                                      # can be set to 'embedded', 'postgres', 'mysql' or 'mariadb'
 database_options:
-  external_hostname: '127.0.0.1'                                   # if this is empty, Ansible will install and prepare the databases on the ambari-node
+  external_hostname: ''                                   # if this is empty, Ansible will install and prepare the databases on the ambari-node
   ambari_db_name: 'ambari'
   ambari_db_username: 'ambari'
   ambari_db_password: 'bigdata'
@@ -121,7 +121,7 @@ blueprint_name: '{{ cluster_name }}_blueprint'            # the name of the blue
 blueprint_file: 'blueprint_dynamic.j2'                    # the blueprint JSON file - 'blueprint_dynamic.j2' is a Jinja2 template that generates the required JSON
 blueprint_dynamic:                                        # properties for the dynamic blueprint - these are only used by the 'blueprint_dynamic.j2' template to generate the JSON
   - host_group: "hdp-master"
-    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT', 'HCAT', 'TEZ_CLIENT', 'SLIDER', 'SQOOP', 'HBASE_CLIENT']
+    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT', 'TEZ_CLIENT', 'SLIDER', 'PIG', 'INFRA_SOLR_CLIENT']
     services:
       - ZOOKEEPER_SERVER
       - NAMENODE
@@ -136,12 +136,12 @@ blueprint_dynamic:                                        # properties for the d
       - METRICS_COLLECTOR
       - METRICS_MONITOR
       - HST_SERVER
-      - HBASE_MASTER
-      - HBASE_REGIONSERVER
+      - RANGER_ADMIN
+      - RANGER_USERSYNC
+      - INFRA_SOLR
       - KNOX_GATEWAY
-
   - host_group: "hdp-slave"
-    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT', 'HCAT', 'TEZ_CLIENT', 'SLIDER', 'SQOOP', 'HBASE_CLIENT']
+    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT', 'TEZ_CLIENT', 'SLIDER', 'PIG', 'INFRA_SOLR_CLIENT']
     services:
       - DATANODE
       - NODEMANAGER
