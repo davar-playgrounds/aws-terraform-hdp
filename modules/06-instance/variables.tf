@@ -30,10 +30,6 @@ data "consul_keys" "app" {
     path    = "${var.path_in_consul_aws}/ami_id"
   }
   key {
-    name    = "instance_type"
-    path    = "${var.path_in_consul_hdp}${var.cluster_type}/instance_type"
-  }
-  key {
     name    = "Name"
     path    = "${var.path_in_consul_aws}/tags/Name"
   }
@@ -51,6 +47,10 @@ data "consul_keys" "app" {
   }
   key {
     name    = "no_instances"
-    path    = "${var.path_in_consul_hdp}/no_instances"
+    path    = "${var.path_in_consul_hdp}${var.cluster_type}/no_instances"
+  }
+  key {
+    name    = "instance_type"
+    path    = "${var.path_in_consul_hdp}${var.cluster_type}/instance_type"
   }
 }
