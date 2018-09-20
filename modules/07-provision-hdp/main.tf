@@ -1,26 +1,59 @@
-resource "null_resource" "clone_hdp_repo" {
+local.resource "null_resource" "clone_hdp_repo" {
   # Clone HDP repository
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook resources/clone-ansible-hortonworks.yml"
   }
 }
 
+locals {
+
+  ambari-host = "${data.consul_keys.app.var.public_dns_ambari}"
+  ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
+  master-host = "${data.consul_keys.app.var.public_dns_namenode}"
+  master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
+  slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
+  slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
+
+  clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
+  master-clients = "${data.consul_keys.hdp.var.master-clients}"
+  master-services = "${data.consul_keys.hdp.var.master-services}"
+
+  workdir="${path.cwd}/output/hdp-server/${data.consul_keys.mine.var.hdp_cluster_name}"
+}
+
+# prepare hosts file
 data "template_file" "ansible_hosts" {
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
   vars {
-    ambari-host = "${data.consul_keys.app.var.public_dns_ambari}"
-    ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
-    master-host = "${data.consul_keys.app.var.public_dns_namenode}"
-    master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
-    slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
-    slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
+    ambari-host = "${local.public_dns_ambari}"
+    ambari-ip = "${local.var.public_ip_ambari}"
+    master-host = "${local.public_dns_namenode}"
+    master-ip = "${local.public_ip_namenode}"
+    slave-host = "${local.public_dns_datanode}"
+    slave-ip = "${local.public_ip_datanode}"
   }
 }
 
-resource "local_file" "ansible_hosts_inventory" {
+resource "local_file" "ansible_hosts_rendered" {
   content  = "${data.template_file.ansible_hosts.rendered}"
   filename = "${local.workdir}/output/ansible-hosts"
+}
+
+# prepare hdp config file
+data "template_file" "hdp_config" {
+  template = "${file("${path.module}/resources/templates/hdp-cluster-config.tmpl")}"
+
+  vars {
+    clustername = "${local.var.hdp_cluster_name}"
+    master-clients = "${local.var.master-clients}"
+    master-services = "${local.var.master-services}"
+  }
+}
+
+resource "local_file" "hdp_config_rendered" {
+  content  = "${data.template_file.hdp_config.rendered}"
+  filename = "${local.workdir}/output/hdp-cluster-config.yml"
 }
 
 resource "null_resource" "passwordless_ssh" {
@@ -36,7 +69,11 @@ resource "null_resource" "install_python_packages" {
 }
 
 resource "null_resource" "prepare_nodes" {
-  depends_on = ["null_resource.install_python_packages"]
+  depends_on = [
+    "null_resource.install_python_packages",
+    "local_file.ansible_hosts_rendered",
+    "local_file.hdp_config_rendered",
+  ]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static --extra-vars=${var.hdp_spec} ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
   }
