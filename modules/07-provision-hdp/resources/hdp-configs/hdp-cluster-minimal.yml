@@ -144,9 +144,6 @@ blueprint_dynamic:                                        # properties for the d
       - METRICS_MONITOR
       - HST_AGENT
 
-
-
-
 ############################
 ## helper variables ##                                    # don't change these unless there is a good reason
 ############################
