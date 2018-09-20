@@ -60,11 +60,11 @@ data "consul_keys" "hdp" {
 
   key {
     name = "master-services"
-    path = "${var.path_in_consul_hdp}/master-services"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/master-services"
   }
 
   key {
     name = "slave-services"
-    path = "${var.path_in_consul_hdp}/slave-services"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/slave-services"
   }
 }
