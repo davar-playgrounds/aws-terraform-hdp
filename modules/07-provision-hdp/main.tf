@@ -45,9 +45,9 @@ data "template_file" "hdp_config" {
   template = "${file("${path.module}/resources/templates/hdp-cluster-config.tmpl")}"
 
   vars {
-    clustername = "${local.var.hdp_cluster_name}"
-    master-clients = "${local.var.master-clients}"
-    master-services = "${local.var.master-services}"
+    clustername = "${local.hdp_cluster_name}"
+    master-clients = "${local.master-clients}"
+    master-services = "${local.master-services}"
   }
 }
 
