@@ -75,21 +75,21 @@ resource "null_resource" "prepare_nodes" {
     "local_file.hdp_config_rendered",
   ]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static --extra-vars=${var.hdp_spec} ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static ${local.workdir}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
   }
 }
 
 resource "null_resource" "install_ambari" {
   depends_on = ["null_resource.prepare_nodes"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static --extra-vars=${var.hdp_spec} ${local.workdir}/resources/ansible-hortonworks/playbooks/install_ambari.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static ${local.workdir}/resources/ansible-hortonworks/playbooks/install_ambari.yml"
   }
 }
 
 resource "null_resource" "configure_ambari" {
   depends_on = ["null_resource.install_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static --extra-vars=${var.hdp_spec} ${local.workdir}/resources/ansible-hortonworks/playbooks/configure_ambari.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}${var.hdp_spec} ${local.workdir}/resources/ansible-hortonworks/playbooks/configure_ambari.yml"
   }
 }
 
