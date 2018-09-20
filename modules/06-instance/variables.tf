@@ -3,7 +3,7 @@ variable "path_in_consul_aws" {
 }
 
 variable "path_in_consul_hdp" {
-  default   = "test/master/aws/hdp-"${var.cluster_type}
+  default   = "test/master/aws/hdp-"
 }
 
 variable "consul_server" {
@@ -29,7 +29,7 @@ data "consul_keys" "app" {
   }
   key {
     name    = "instance_type"
-    path    = "${var.path_in_consul_hdp}/instance_type"
+    path    = "${var.path_in_consul_hdp}${var.cluster_type}/instance_type"
   }
   key {
     name    = "Name"
