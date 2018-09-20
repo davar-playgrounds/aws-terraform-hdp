@@ -18,7 +18,7 @@ locals {
   master-clients = "${data.consul_keys.hdp.var.master-clients}"
   master-services = "${data.consul_keys.hdp.var.master-services}"
 
-  workdir="${path.cwd}/output/hdp-server/${data.consul_keys.mine.var.hdp_cluster_name}"
+  #workdir="${path.cwd}/output/hdp-server/${data.consul_keys.mine.var.hdp_cluster_name}"
 }
 
 # prepare hosts file
