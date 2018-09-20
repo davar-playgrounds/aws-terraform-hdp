@@ -26,12 +26,12 @@ data "template_file" "ansible_hosts" {
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
   vars {
-    ambari-host = "${local.public_dns_ambari}"
-    ambari-ip = "${local.public_ip_ambari}"
-    master-host = "${local.public_dns_namenode}"
-    master-ip = "${local.public_ip_namenode}"
-    slave-host = "${local.public_dns_datanode}"
-    slave-ip = "${local.public_ip_datanode}"
+    ambari-host = "${local.ambari-host}"
+    ambari-ip = "${local.ambari-ip}"
+    master-host = "${local.master-host}"
+    master-ip = "${local.master-ip}"
+    slave-host = "${local.slave-host}"
+    slave-ip = "${local.slave-ip}"
   }
 }
 
@@ -45,7 +45,7 @@ data "template_file" "hdp_config" {
   template = "${file("${path.module}/resources/templates/hdp-cluster-config.tmpl")}"
 
   vars {
-    clustername = "${local.hdp_cluster_name}"
+    clustername = "${local.clustername}"
     master-clients = "${local.master-clients}"
     master-services = "${local.master-services}"
   }
