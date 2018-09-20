@@ -27,7 +27,7 @@ data "template_file" "ansible_hosts" {
 
   vars {
     ambari-host = "${local.public_dns_ambari}"
-    ambari-ip = "${local.var.public_ip_ambari}"
+    ambari-ip = "${local.public_ip_ambari}"
     master-host = "${local.public_dns_namenode}"
     master-ip = "${local.public_ip_namenode}"
     slave-host = "${local.public_dns_datanode}"
