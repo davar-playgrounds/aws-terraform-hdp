@@ -16,8 +16,8 @@ locals {
 
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
   master-clients = "${data.consul_keys.hdp.var.master-clients}"
-  slave-clients = "${data.consul_keys.hdp.var.master-clients}"
   master-services = "${data.consul_keys.hdp.var.master-services}"
+  slave-clients = "${data.consul_keys.hdp.var.master-clients}"
   slave-services = "${data.consul_keys.hdp.var.slave-services}"
 
   #workdir="${path.cwd}/output/hdp-server/${data.consul_keys.mine.var.hdp_cluster_name}"
@@ -50,6 +50,8 @@ data "template_file" "hdp_config" {
     clustername = "${local.clustername}"
     master-clients = "${local.master-clients}"
     master-services = "${local.master-services}"
+    slave-clients = "${local.master-clients}"
+    slave-services = "${local.slave-services}"
   }
 }
 
