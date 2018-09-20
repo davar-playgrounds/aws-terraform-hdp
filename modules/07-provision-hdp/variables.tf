@@ -1,3 +1,5 @@
+variable "cluster_type" {}
+
 locals {
   workdir = "${path.cwd}"
 }
@@ -7,7 +9,7 @@ variable "path_in_consul" {
 }
 
 variable "path_in_consul_hdp" {
-  default   = "test/master/aws/hdp"
+  default   = "test/master/aws/hdp-"
 }
 
 
@@ -48,12 +50,12 @@ data "consul_keys" "app" {
 data "consul_keys" "hdp" {
   key {
     name = "hdp_cluster_name"
-    path = "${var.path_in_consul_hdp}/cluster_name"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/cluster_name"
   }
 
   key {
     name = "master-clients"
-    path = "${var.path_in_consul_hdp}/master-clients"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/master-clients"
   }
 
   key {
