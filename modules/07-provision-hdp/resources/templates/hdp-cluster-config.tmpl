@@ -124,13 +124,10 @@ blueprint_dynamic:                                        # properties for the d
     clients: ${master-clients}
     services:
       ${master-services}
-#  - host_group: "hdp-slave"
-#    clients: ['ZOOKEEPER_CLIENT', 'HDFS_CLIENT', 'YARN_CLIENT', 'MAPREDUCE2_CLIENT', 'HIVE_CLIENT']
-#    services:
-#      - DATANODE
-#      - NODEMANAGER
-#      - METRICS_MONITOR
-#      - HST_AGENT
+  - host_group: "hdp-slave"
+    clients: ${slave-clients}
+    services:
+      ${slave-services}T
 
 
 ############################

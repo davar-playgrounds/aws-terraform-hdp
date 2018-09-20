@@ -60,4 +60,9 @@ data "consul_keys" "hdp" {
     name = "master-services"
     path = "${var.path_in_consul_hdp}/master-services"
   }
+
+  key {
+    name = "slave-services"
+    path = "${var.path_in_consul_hdp}/slave-services"
+  }
 }
