@@ -54,6 +54,21 @@ data "consul_keys" "hdp" {
   }
 
   key {
+    name = "ambari_version"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/ambari_version"
+  }
+
+  key {
+    name = "hdp_version"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/hdp_version"
+  }
+
+  key {
+    name = "hdp_build_number"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/hdp_build_number"
+  }
+
+  key {
     name = "master-clients"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/master-clients"
   }

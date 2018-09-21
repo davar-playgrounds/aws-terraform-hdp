@@ -15,6 +15,10 @@ locals {
   slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
 
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
+  ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
+  hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
+  hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
+
   master-clients = "${data.consul_keys.hdp.var.master-clients}"
   master-services = "${data.consul_keys.hdp.var.master-services}"
   slave-clients = "${data.consul_keys.hdp.var.master-clients}"
@@ -48,6 +52,9 @@ data "template_file" "hdp_config" {
 
   vars {
     clustername = "${local.clustername}"
+    ambari_version = "${local.ambari_version}"
+    hdp_version = "${local.hdp_version}"
+    hdp_build_number = "${local.hdp_build_number}"
     master-clients = "${local.master-clients}"
     master-services = "${local.master-services}"
     slave-clients = "${local.master-clients}"

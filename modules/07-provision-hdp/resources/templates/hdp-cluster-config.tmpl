@@ -5,10 +5,10 @@
 
 cluster_name: '${clustername}'
 
-ambari_version: '2.6.2.2'                                 # must be the 4-part full version number
+ambari_version: '${ambari_version}'                                 # must be the 4-part full version number
 
-hdp_version: '2.6.5.0'                                    # must be the 4-part full version number
-hdp_build_number: 'auto'                                  # the HDP build number from docs.hortonworks.com (if set to 'auto', Ansible will try to get it from the repository)
+hdp_version: '${hdp_version}'                                    # must be the 4-part full version number
+hdp_build_number: '${hdp_build_number}'                                  # the HDP build number from docs.hortonworks.com (if set to 'auto', Ansible will try to get it from the repository)
 
 hdf_version: '3.1.2.0'                                    # must be the 4-part full version number
 hdf_build_number: 'auto'                                  # the HDF build number from docs.hortonworks.com (if set to 'auto', Ansible will try to get it from the repository)
