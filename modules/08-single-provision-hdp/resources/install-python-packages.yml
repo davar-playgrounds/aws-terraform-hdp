@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  tasks:
+    - name: install jq
+      yum:
+        name: jq
+        state: latest
+
+- hosts: all
+  tasks:
+    - name: install pip
+      easy_install:
+        name: pip
+        state: latest
+      become: yes
+      become_user: root
+    - name: install Python packages
+      pip:
+        name: Jinja2
+        state: latest
+        extra_args: --user

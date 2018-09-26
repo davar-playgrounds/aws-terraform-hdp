@@ -1,0 +1,5 @@
+[hdp-master]
+${master-host} ansible_host=${master-ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
+
+[hdp-slave]
+${ansible_hdp_slave_name} ${ansible_hdp_slave_hosts} ${ansible_hdp_slave_login_cred}
