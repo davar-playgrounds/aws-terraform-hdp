@@ -2,7 +2,10 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
-
+provider "consul" {
+  address    = "${var.consul_server}:${var.consul_port}"
+  datacenter = "${var.datacenter}"
+}
 
 resource "aws_instance" "test_instance" {
   count = "${data.consul_keys.app.var.no_instances}"
@@ -17,13 +20,18 @@ resource "aws_instance" "test_instance" {
   tags {
     Name = "${data.consul_keys.app.var.Name}"
   }
+
 }
 
 resource "consul_keys" "app" {
+  depends_on = [
+    "aws_instance.test_instance"
+  ]
+
   datacenter = "${var.datacenter}"
   key {
     path = "test/master/aws/test-instance/single/instance_id"
-    value = "${aws_instance.test_instance.*.id[0]}"
+    value = "aa" #"${aws_instance.test_instance.id[0]}"
   }
   key {
     path = "test/master/aws/test-instance/single/public_ip"
