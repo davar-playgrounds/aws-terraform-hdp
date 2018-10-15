@@ -1,4 +1,4 @@
-cluster_type = "r-server"
+variable cluster_type = "r-server"
 
 variable "path_in_consul_aws" {
   default   = "test/master/aws/test-instance"
