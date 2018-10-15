@@ -1,10 +1,8 @@
-module r_server {
-  source             = "../spectrum-scale"
-}
-
 provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
+
+
 
 resource "aws_instance" "test_instance" {
   count = "${data.consul_keys.app.var.no_instances}"
@@ -23,7 +21,6 @@ resource "aws_instance" "test_instance" {
 
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
-
   key {
     path = "test/master/aws/test-instance/single/instance_id"
     value = "${aws_instance.test_instance.*.id[0]}"
@@ -36,5 +33,4 @@ resource "consul_keys" "app" {
     path = "test/master/aws/test-instance/single/public_dns"
     value = "${aws_instance.test_instance.*.public_dns[0]}"
   }
-
 }
