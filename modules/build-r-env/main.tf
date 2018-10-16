@@ -10,7 +10,7 @@ locals {
 }
 
 data "template_file" "ansible_hosts_tmpl" {
-  template = "${file("${path.module}/resources/templates/ansible_hosts.tmpl")}"
+  template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
   vars {
     public_ip = "${local.public_ip}"
