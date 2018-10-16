@@ -1,5 +1,5 @@
 module r_server {
-  source             = "../06-instance"
+  source             = "../single"
   cluster_type       = "r-server"
 }
 
