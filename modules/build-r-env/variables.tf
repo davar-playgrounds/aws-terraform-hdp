@@ -3,7 +3,7 @@ variable "cluster_type" {
 }
 
 variable "path_in_consul_aws" {
-  default   = "test/master/aws/test-instance"
+  default   = "test/master/aws/test-instance/single/"
 }
 
 variable "consul_server" {
