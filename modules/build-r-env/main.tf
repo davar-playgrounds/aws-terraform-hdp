@@ -30,6 +30,6 @@ resource "null_resource" "install_r" {
   ]
 
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible_hosts ${path.module}/resources/ansible/install_r.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible_hosts ${path.module}/resources/ansible/install_r.yml"
   }
 }
