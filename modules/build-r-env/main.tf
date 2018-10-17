@@ -1,5 +1,4 @@
-module r_server {
-  depends_on         = "${var.depends_on}"
+module "r_server" {
   source             = "../single"
   cluster_type       = "r-server"
 }
@@ -11,6 +10,9 @@ locals {
 }
 
 data "template_file" "ansible_hosts_tmpl" {
+  depends_on = [
+    "module.r_server"
+  ]
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
   vars {
@@ -26,8 +28,7 @@ resource "local_file" "ansible_hosts_render" {
 
 resource "null_resource" "install_r" {
   depends_on = [
-    "module.r_server",
-    "local_file.ansible_hosts_render",
+    "local_file.ansible_hosts_render"
   ]
 
   provisioner "local-exec" {
