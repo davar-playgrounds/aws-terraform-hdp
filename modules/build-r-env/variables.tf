@@ -1,3 +1,7 @@
+variable "depends_on" {
+  default = ""
+}
+
 variable "cluster_type" {
   default =  "r-server"
 }

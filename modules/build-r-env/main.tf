@@ -1,4 +1,5 @@
 module r_server {
+  depends_on         = "${var.depends_on}"
   source             = "../single"
   cluster_type       = "r-server"
 }
