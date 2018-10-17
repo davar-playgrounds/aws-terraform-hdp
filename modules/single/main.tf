@@ -32,15 +32,15 @@ resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
   key {
     path = "test/master/aws/test-instance/single/${var.cluster_type}/instance_id"
-    value = "${aws_instance.test_instance.id[0]}"
+    value = "${aws_instance.test_instance.id}"
   }
   key {
     path = "test/master/aws/test-instance/single/${var.cluster_type}/public_ip"
-    value = "${aws_instance.test_instance.*.public_ip[0]}"
+    value = "${aws_instance.test_instance.*.public_ip}"
   }
   key {
     path = "test/master/aws/test-instance/single/${var.cluster_type}/public_dns"
-    value = "${aws_instance.test_instance.*.public_dns[0]}"
+    value = "${aws_instance.test_instance.*.public_dns}"
   }
 
 }
