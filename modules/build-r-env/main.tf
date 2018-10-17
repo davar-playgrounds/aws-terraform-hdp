@@ -4,8 +4,8 @@ module "r_server" {
 }
 
 locals {
-  public_ip = "${data.consul_keys.app.var.public_ip}"
-  public_dns = "${data.consul_keys.app.var.public_dns}"
+  #public_ip = "${data.consul_keys.app.var.public_ip}"
+  #public_dns = "${data.consul_keys.app.var.public_dns}"
   workdir="${path.cwd}/output"
 }
 
@@ -16,8 +16,8 @@ data "template_file" "ansible_hosts_tmpl" {
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
   vars {
-    public_ip = "${local.public_ip}"
-    public_dns = "${local.public_dns}"
+    public_ip = "${data.consul_keys.app.var.public_ip}" #"${local.public_ip}"
+    public_dns = "${data.consul_keys.app.var.public_dns}" #"${local.public_dns}"
   }
 }
 
