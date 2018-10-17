@@ -11,6 +11,7 @@ resource "aws_vpc" "test_vpc" {
   }
 }
 
+# Write values to consul
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 

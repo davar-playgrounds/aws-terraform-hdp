@@ -2,10 +2,11 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
+/*
 provider "consul" {
   address    = "${var.consul_server}:${var.consul_port}"
   datacenter = "${var.datacenter}"
-}
+}*/
 
 resource "aws_instance" "test_instance" {
   count = "${data.consul_keys.app.var.no_instances}"
