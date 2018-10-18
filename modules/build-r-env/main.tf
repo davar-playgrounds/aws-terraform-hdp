@@ -12,7 +12,7 @@ locals {
 
 resource "null_resource" "create_server" {
   provisioner "local-exec" {
-    command = "cd ${singledir}; terraform apply -auto-approve -var cluster_type=r-server"
+    command = "cd "${singledir}"; terraform apply -auto-approve -var cluster_type=r-server"
   }
 }
 
