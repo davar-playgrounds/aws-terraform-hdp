@@ -1,5 +1,5 @@
 variable "cluster_type" {
-  default = "r-server"
+  #default = "r-server"
 }
 
 variable "path_in_consul_aws" {
