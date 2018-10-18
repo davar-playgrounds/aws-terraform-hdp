@@ -1,7 +1,14 @@
 ---
 - hosts: all
   tasks:
+    - name: Install epel-release
+      yum:
+        name: epel-release
+        state: present
+      become: yes
+      
     - name: Install R
       yum:
         name: R
         state: present
+      become: yes

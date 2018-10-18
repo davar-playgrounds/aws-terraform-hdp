@@ -3,6 +3,15 @@ module "r_server" {
   cluster_type       = "r-server"
 }
 
+resource "null_resource" "delay" {
+  depends_on = [
+    "module.r_server"
+  ]
+  provisioner "local-exec" {
+    command = "sleep 10"
+  }
+}
+
 locals {
   #public_ip = "${data.consul_keys.app.var.public_ip}"
   #public_dns = "${data.consul_keys.app.var.public_dns}"
@@ -11,7 +20,7 @@ locals {
 
 data "template_file" "ansible_hosts_tmpl" {
   depends_on = [
-    "module.r_server"
+    "null_resource.delay"
   ]
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
