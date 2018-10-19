@@ -25,6 +25,6 @@
     password: $1$SomeSalt$aIJ0bvHJBSYd307VQuuD90
 
   tasks:
-    - name Create test user
+    - name: Create test user
       user: name=test password={{password}}
       become: yes

@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+  - name: Copy files for testing R
+    copy:
+      src:/home/centos/aws-consul-terraform/modules/build-r-env/resources/test
+      dest:/tmp
