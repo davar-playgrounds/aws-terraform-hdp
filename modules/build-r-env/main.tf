@@ -28,3 +28,13 @@ resource "null_resource" "install_r" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible_hosts ${path.module}/resources/ansible/install_r.yml"
   }
 }
+
+resource "null_resource" "run_test" {
+  depends_on = [
+    "null_resource.install_r"
+  ]
+
+  provisioner "local-exec" {
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible_hosts ${path.module}/resources/ansible/run_test.yml"
+  }
+}
