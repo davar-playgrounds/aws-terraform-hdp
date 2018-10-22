@@ -11,7 +11,7 @@ library(doParallel)
 
 
 # Data
-mydata <- read.csv("T3 prediction.csv")
+mydata <- read.csv("T3_prediction.csv")
 
 features <- c("GpaVgs",	"gender",	"T1nt",	"T1et",	"T1ot",	"T1at",	"T1ct",	"T1FamilyEdu",	"T1FamilyIncome",	"GpaBI",	"T1NarcissLeader",
               "T1Makt1Orient",	"Mgt_Y.N",	"T3SalaryLevel")
