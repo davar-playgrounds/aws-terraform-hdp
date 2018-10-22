@@ -3,6 +3,12 @@
 # Mathias Hansson 06.06.2018
 #=======================================================================================
 
+# Install packages
+install.packages("caret", , lib="/tmp/data/Rpackages/", repos='http://cran.us.r-project.org')
+install.packages("readr", , lib="/tmp/data/Rpackages/", repos='http://cran.us.r-project.org')
+install.packages("doSNOW", , lib="/tmp/data/Rpackages/", repos='http://cran.us.r-project.org')
+install.packages("doParallel", , lib="/tmp/data/Rpackages/", repos='http://cran.us.r-project.org')
+
 # Libraries
 library(caret)
 library(readr)

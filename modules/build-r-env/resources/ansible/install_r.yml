@@ -17,6 +17,10 @@
       yum: name=https://download2.rstudio.org/rstudio-server-rhel-1.1.453-x86_64.rpm
       become: yes
 
+    - name: Create folder for R libraries
+      file: path=/tmp/data/Rpackages
+      state: directory
+
 - hosts: all
   user: root
   vars:
