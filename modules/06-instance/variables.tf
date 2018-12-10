@@ -5,7 +5,7 @@ variable "path_in_consul_aws" {
 }
 
 variable "path_in_consul_hdp" {
-  default   = "test/master/aws/hdp-"
+  default   = "test/master/aws/"
 }
 
 variable "consul_server" {
