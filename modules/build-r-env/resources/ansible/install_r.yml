@@ -18,8 +18,7 @@
       become: yes
 
     - name: Create folder for R libraries
-      file: path=/tmp/data/Rpackages
-      state: directory
+      file: path=/tmp/data/Rpackages state=directory
 
 - hosts: all
   user: root
