@@ -1,17 +1,12 @@
 variable "cluster_type" {}
 
-locals {
-  workdir = "${path.cwd}"
-}
-
 variable "path_in_consul" {
   default   = "test/master/aws/test-instance"
 }
 
 variable "path_in_consul_hdp" {
-  default   = "test/master/aws/hdp-"
+  default   = "test/master/aws/"
 }
-
 
 variable "hdp_spec" {
   default = "/output/hdp-cluster-config.yml"
