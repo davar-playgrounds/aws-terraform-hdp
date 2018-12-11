@@ -27,59 +27,15 @@ resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
   key {
-    path = "test/master/aws/test-instance/instance_ids"
-    value = "${aws_instance.test_instance.*.id}"
+     path = "test/master/aws/test-instance/instance_ids"
+     value = "${join(",", aws_instance.test_instance.*.id)}"
+   }
+   key {
+     path = "test/master/aws/test-instance/public_ips"
+     value = "${join(",", aws_instance.test_instance.*.public_ip)}"
+   }
+   key {
+     path = "test/master/aws/test-instance/public_dns"
+     value = "${join(",", aws_instance.test_instance.*.public_dns)}"
   }
-  key {
-    path = "test/master/aws/test-instance/public_ips"
-    value = "${aws_instance.test_instance.*.public_ip}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_dns"
-    value = "${aws_instance.test_instance.*.public_dns}"
-  }
-
-/*
-  # ambari
-  key {
-    path = "test/master/aws/test-instance/instance_id_ambari"
-    value = "${aws_instance.test_instance.*.id[0]}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_ip_ambari"
-    value = "${aws_instance.test_instance.*.public_ip[0]}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_dns_ambari"
-    value = "${aws_instance.test_instance.*.public_dns[0]}"
-  }
-
-  # namenode
-  key {
-    path = "test/master/aws/test-instance/instance_id_namenode"
-    value = "${aws_instance.test_instance.*.id[0]}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_ip_namenode"
-    value = "${aws_instance.test_instance.*.public_ip[0]}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_dns_namenode"
-    value = "${aws_instance.test_instance.*.public_dns[0]}"
-  }
-
-  # datanode
-  key {
-    path = "test/master/aws/test-instance/instance_id_datanode"
-    value = "${aws_instance.test_instance.*.id[0]}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_ip_datanode"
-    value = "${aws_instance.test_instance.*.public_ip[0]}"
-  }
-  key {
-    path = "test/master/aws/test-instance/public_dns_datanode"
-    value = "${aws_instance.test_instance.*.public_dns[0]}"
-  }
-*/
 }
