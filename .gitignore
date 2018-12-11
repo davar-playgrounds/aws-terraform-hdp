@@ -2,7 +2,6 @@
 *.terraform*
 output
 *nohup*
-*/ansible-hortonworks-master*
 *.retry
 *.apply
 *.plan
