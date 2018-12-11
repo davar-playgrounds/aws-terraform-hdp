@@ -3,6 +3,7 @@
 output
 *nohup*
 */ansible-hortonworks*
+*/ansible-hortonworks-master*
 *.retry
 *.apply
 *.plan
