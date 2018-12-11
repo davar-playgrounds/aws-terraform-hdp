@@ -75,7 +75,7 @@ resource "null_resource" "passwordless_ssh" {
 
 resource "null_resource" "install_python_packages" {
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${local.workdir}/resources/install-python-packages.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${path.module}/resources/install-python-packages.yml"
   }
 }
 
