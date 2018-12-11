@@ -12,6 +12,12 @@ resource "aws_instance" "test_instance" {
   key_name = "mykeypair"
   associate_public_ip_address = "true"
 
+  ebs_block_device {
+    device_name = "/dev/xvdb"
+    volume_type = "gp2"
+    volume_size = 50
+  }
+
   tags {
     Name = "${data.consul_keys.app.var.Name}"
   }
