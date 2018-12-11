@@ -26,6 +26,20 @@ resource "aws_instance" "test_instance" {
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
+  key {
+    path = "test/master/aws/test-instance/instance_ids"
+    value = "${aws_instance.test_instance.*.id}"
+  }
+  key {
+    path = "test/master/aws/test-instance/public_ips"
+    value = "${aws_instance.test_instance.*.public_ip}"
+  }
+  key {
+    path = "test/master/aws/test-instance/public_dns"
+    value = "${aws_instance.test_instance.*.public_dns}"
+  }
+
+/*
   # ambari
   key {
     path = "test/master/aws/test-instance/instance_id_ambari"
@@ -67,4 +81,5 @@ resource "consul_keys" "app" {
     path = "test/master/aws/test-instance/public_dns_datanode"
     value = "${aws_instance.test_instance.*.public_dns[0]}"
   }
+*/
 }
