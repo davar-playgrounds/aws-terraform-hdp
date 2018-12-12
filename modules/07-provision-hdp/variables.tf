@@ -18,13 +18,13 @@ data "consul_keys" "app" {
     #name    = "public_dns_ambari"
     name    = "public_dns"
     #path    = "${var.path_in_consul}/public_dns_ambari"
-    path    = "${var.path_in_consul}/public_dns"
+    path    = "$list({var.path_in_consul}/public_dns)"
   }
   key {
     #name    = "public_ip_ambari"
     #path    = "${var.path_in_consul}/public_ip_ambari"
     name    = "public_ips"
-    path    = "${var.path_in_consul}/public_ips"
+    path    = "$list({var.path_in_consul}/public_ips)"
   }
   # namenode
   #key {
