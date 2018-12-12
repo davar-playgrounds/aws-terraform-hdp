@@ -16,6 +16,19 @@ locals {
   slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
   */
 
+  public_dns = "${list(data.consul_keys.app.var.public_dns)}"
+  public_ips = "${list(data.consul_keys.app.var.public_ips)}"
+
+  ambari_host = "${local.public_dns[0]}"
+  ambari_ip = "${local.public_ips[0]}"
+
+  master-host = "${local.public_dns[1]}"
+  master_ip = "${local.public_ips[1]}"
+
+  slave_host = "${local.public_dns[1]}"
+  slave_ip = "${local.public_ips[1]}"
+
+/*
   ambari-host = "${data.consul_keys.app.var.public_dns[0]}"
   ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
   master-host = "${data.consul_keys.app.var.public_dns_namenode}"
@@ -32,7 +45,7 @@ locals {
   master-services = "${data.consul_keys.hdp.var.master-services}"
   slave-clients = "${data.consul_keys.hdp.var.master-clients}"
   slave-services = "${data.consul_keys.hdp.var.slave-services}"
-
+*/
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 }
 
@@ -41,12 +54,12 @@ data "template_file" "ansible_hosts" {
   template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
 
   vars {
-    ambari-host = "${local.ambari-host}"
-    ambari-ip = "${local.ambari-ip}"
-    master-host = "${local.master-host}"
-    master-ip = "${local.master-ip}"
-    slave-host = "${local.slave-host}"
-    slave-ip = "${local.slave-ip}"
+    ambari_host = "${local.ambari_host}"
+    ambari_ip = "${local.ambari_ip}"
+    master_host = "${local.master_host}"
+    master_ip = "${local.master_ip}"
+    slave_host = "${local.slave_host}"
+    slave_ip = "${local.slave_ip}"
   }
 }
 
@@ -64,10 +77,10 @@ data "template_file" "hdp_config" {
     ambari_version = "${local.ambari_version}"
     hdp_version = "${local.hdp_version}"
     hdp_build_number = "${local.hdp_build_number}"
-    master-clients = "${local.master-clients}"
-    master-services = "${local.master-services}"
-    slave-clients = "${local.master-clients}"
-    slave-services = "${local.slave-services}"
+    master_clients = "${local.master_clients}"
+    master_services = "${local.master_services}"
+    slave_clients = "${local.master_clients}"
+    slave_services = "${local.slave_services}"
   }
 }
 

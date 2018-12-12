@@ -1,8 +1,8 @@
 [ambari-server]
-${ambari-host} ansible_host=${ambari-ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
+${ambari_host} ansible_host=${ambari_ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
 
 [hdp-master]
-${master-host} ansible_host=${master-ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
+${master_host} ansible_host=${master_ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
 
 #[hdp-slave]
-#${slave-host} ansible_host=${slave-ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
+#${slave_host} ansible_host=${slave_ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
