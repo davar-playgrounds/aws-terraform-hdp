@@ -83,9 +83,9 @@ resource "null_resource" "passwordless_ssh" {
   ]
 
   provisioner "local-exec" {
-    command = <<-EOT
+    command = <<-EOF
       echo "Sleeping for 10 seconds..."; sleep 10
-    EOT
+    EOF
   }
 
   provisioner "local-exec" {
