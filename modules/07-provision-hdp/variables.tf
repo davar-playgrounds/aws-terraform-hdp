@@ -12,40 +12,6 @@ variable "hdp_spec" {
   default = "/output/hdp-cluster-config.yml"
 }
 
-data "consul_keys" "app" {
-  # ambari
-  key {
-    #name    = "public_dns_ambari"
-    name    = "public_dns"
-    #path    = "${var.path_in_consul}/public_dns_ambari"
-    path    = "$list({var.path_in_consul}/public_dns)"
-  }
-  key {
-    #name    = "public_ip_ambari"
-    #path    = "${var.path_in_consul}/public_ip_ambari"
-    name    = "public_ips"
-    path    = "$list({var.path_in_consul}/public_ips)"
-  }
-  # namenode
-  #key {
-    #name    = "public_dns_namenode"
-    #path    = "${var.path_in_consul}/public_dns_namenode"
-  #}
-#  key {
-#    name    = "public_ip_namenode"
-#    path    = "${var.path_in_consul}/public_ip_namenode"
-#  }
-  # datanode
-  #key {
-  #  name    = "public_dns_datanode"
-  #  path    = "${var.path_in_consul}/public_dns_datanode"
-  #}
-  #key {
-  #  name    = "public_ip_datanode"
-  #  path    = "${var.path_in_consul}/public_ip_datanode"
-  #}
-}
-
 data "consul_keys" "hdp" {
   key {
     name = "hdp_cluster_name"
@@ -68,17 +34,22 @@ data "consul_keys" "hdp" {
   }
 
   key {
+    name = "ambari_services"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/ambari_services"
+  }
+
+  key {
     name = "master_clients"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/master-clients"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/master_clients"
   }
 
   key {
     name = "master_services"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/master-services"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/master_services"
   }
 
   key {
     name = "slave_services"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/slave-services"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/slave_services"
   }
 }
