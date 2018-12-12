@@ -171,10 +171,10 @@ blueprint_dynamic:                                        # properties for the d
   services:
     ${ambari_services}
 
-  - host_group: "hdp-master"
-    clients: ${master_clients}
-    services:
-      ${master_services}
+- host_group: "hdp-master"
+  clients: ${master_clients}
+  services:
+    ${master_services}
 
 
 ############################
