@@ -23,6 +23,8 @@ resource "aws_instance" "test_instance" {
   }
 }
 
+/*
+# write to consul
 resource "consul_keys" "app" {
   datacenter = "${var.datacenter}"
 
@@ -39,3 +41,4 @@ resource "consul_keys" "app" {
      value = "${join(",", aws_instance.test_instance.*.public_dns)}"
   }
 }
+*/
