@@ -1,11 +1,3 @@
-module "provision_hdp" {
-  #depends_on         = "${var.depends_on}"
-  source             = "../06-instance"
-  #config_consul_base = "${var.config_consul_base}"
-  #config_consul_path = "${var.config_consul_path}"
-  cluster_type       = "${var.cluster_type}"
-}
-
 provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }

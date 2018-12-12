@@ -1,3 +1,11 @@
+module "provision_hdp" {
+  #depends_on         = "${var.depends_on}"
+  source             = "../06-instance"
+  #config_consul_base = "${var.config_consul_base}"
+  #config_consul_path = "${var.config_consul_path}"
+  cluster_type       = "${var.cluster_type}"
+}
+
 /*resource "null_resource" "clone_hdp_repo" {
   # Clone HDP repository
   provisioner "local-exec" {
@@ -7,17 +15,8 @@
 
 locals {
 
-  /*
-  ambari-host = "${data.consul_keys.app.var.public_dns_ambari}"
-  ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
-  master-host = "${data.consul_keys.app.var.public_dns_namenode}"
-  master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
-  slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
-  slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
-  */
-
-  public_dns = "${list(data.consul_keys.app.var.public_dns)}"
-  public_ips = "${list(data.consul_keys.app.var.public_ips)}"
+  public_dns = "${provision_hdp.public_dns}" #"${list(data.consul_keys.app.var.public_dns)}"
+  public_ips = "${provision_hdp.public_ip}" #"${list(data.consul_keys.app.var.public_ips)}"
 
   ambari_host = "${local.public_dns[0]}"
   ambari_ip = "${local.public_ips[0]}"
