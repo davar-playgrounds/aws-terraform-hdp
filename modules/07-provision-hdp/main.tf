@@ -22,10 +22,11 @@ locals {
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
   hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
 
+  ambari_services = "${data.consul_keys.hdp.var.ambari_services}"
   master_clients = "${data.consul_keys.hdp.var.master_clients}"
   master_services = "${data.consul_keys.hdp.var.master_services}"
-  slave_clients = "${data.consul_keys.hdp.var.master_clients}"
-  slave_services = "${data.consul_keys.hdp.var.slave_services}"
+  #slave_clients = "${data.consul_keys.hdp.var.master_clients}"
+  #slave_services = "${data.consul_keys.hdp.var.slave_services}"
 
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 }
@@ -61,10 +62,11 @@ data "template_file" "hdp_config" {
     ambari_version = "${local.ambari_version}"
     hdp_version = "${local.hdp_version}"
     hdp_build_number = "${local.hdp_build_number}"
+    ambari_services = "${local.ambari_services}"
     master_clients = "${local.master_clients}"
     master_services = "${local.master_services}"
-    slave_clients = "${local.master_clients}"
-    slave_services = "${local.slave_services}"
+    #slave_clients = "${local.slave_clients}"
+    #slave_services = "${local.slave_services}"
   }
 }
 
