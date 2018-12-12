@@ -35,7 +35,7 @@ locals {
   master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
   slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
   slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
-
+*/
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
@@ -45,7 +45,7 @@ locals {
   master-services = "${data.consul_keys.hdp.var.master-services}"
   slave-clients = "${data.consul_keys.hdp.var.master-clients}"
   slave-services = "${data.consul_keys.hdp.var.slave-services}"
-*/
+
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 }
 
