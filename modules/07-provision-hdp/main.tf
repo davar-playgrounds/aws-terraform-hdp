@@ -1,17 +1,7 @@
 module "provision_hdp" {
-  #depends_on         = "${var.depends_on}"
   source             = "../06-instance"
-  #config_consul_base = "${var.config_consul_base}"
-  #config_consul_path = "${var.config_consul_path}"
   cluster_type       = "${var.cluster_type}"
 }
-
-/*resource "null_resource" "clone_hdp_repo" {
-  # Clone HDP repository
-  provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook resources/clone-ansible-hortonworks.yml"
-  }
-}*/
 
 locals {
 
@@ -27,14 +17,6 @@ locals {
   slave_host = "${local.public_dns[1]}"
   slave_ip = "${local.public_ips[1]}"
 
-/*
-  ambari-host = "${data.consul_keys.app.var.public_dns[0]}"
-  ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
-  master-host = "${data.consul_keys.app.var.public_dns_namenode}"
-  master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
-  slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
-  slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
-*/
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
@@ -99,6 +81,12 @@ resource "null_resource" "passwordless_ssh" {
   depends_on = [
     "module.provision_hdp"
   ]
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      echo "Sleeping for 10 seconds..."; sleep 10
+    EOF
+  }
 
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${path.module}/resources/passwordless-ssh.yml"
