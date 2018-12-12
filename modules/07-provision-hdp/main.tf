@@ -41,10 +41,10 @@ locals {
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
   hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
 
-  master-clients = "${data.consul_keys.hdp.var.master-clients}"
-  master-services = "${data.consul_keys.hdp.var.master-services}"
-  slave-clients = "${data.consul_keys.hdp.var.master-clients}"
-  slave-services = "${data.consul_keys.hdp.var.slave-services}"
+  master_clients = "${data.consul_keys.hdp.var.master_clients}"
+  master_services = "${data.consul_keys.hdp.var.master_services}"
+  slave_clients = "${data.consul_keys.hdp.var.master_clients}"
+  slave_services = "${data.consul_keys.hdp.var.slave_services}"
 
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 }
