@@ -22,7 +22,7 @@ locals {
   ambari_host = "${local.public_dns[0]}"
   ambari_ip = "${local.public_ips[0]}"
 
-  master-host = "${local.public_dns[1]}"
+  master_host = "${local.public_dns[1]}"
   master_ip = "${local.public_ips[1]}"
 
   slave_host = "${local.public_dns[1]}"
