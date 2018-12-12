@@ -3,3 +3,6 @@ ${ambari_host} ansible_host=${ambari_ip} ansible_user=centos ansible_ssh_private
 
 [hdp-master]
 ${master_host} ansible_host=${master_ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"
+
+[hdp-slave]
+${slave_host} ansible_host=${slave_ip} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa"

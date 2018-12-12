@@ -176,6 +176,10 @@ blueprint_dynamic:                                        # properties for the d
     services:
       ${master_services}
 
+  - host_group: "hdp-slave"
+    clients: ${slave_clients}
+    services:
+      ${slave_services}
 
 ############################
 ## helper variables ##                                    # don't change these unless there is a good reason

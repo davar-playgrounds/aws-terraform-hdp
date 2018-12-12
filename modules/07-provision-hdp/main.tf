@@ -14,8 +14,8 @@ locals {
   master_host = "${local.public_dns[1]}"
   master_ip = "${local.public_ips[1]}"
 
-  slave_host = "${local.public_dns[1]}"
-  slave_ip = "${local.public_ips[1]}"
+  slave_host = "${local.public_dns[2]}"
+  slave_ip = "${local.public_ips[2]}"
 
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
@@ -25,8 +25,8 @@ locals {
   ambari_services = "${data.consul_keys.hdp.var.ambari_services}"
   master_clients = "${data.consul_keys.hdp.var.master_clients}"
   master_services = "${data.consul_keys.hdp.var.master_services}"
-  #slave_clients = "${data.consul_keys.hdp.var.master_clients}"
-  #slave_services = "${data.consul_keys.hdp.var.slave_services}"
+  slave_clients = "${data.consul_keys.hdp.var.slave_clients}"
+  slave_services = "${data.consul_keys.hdp.var.slave_services}"
 
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 }
@@ -65,8 +65,8 @@ data "template_file" "hdp_config" {
     ambari_services = "${local.ambari_services}"
     master_clients = "${local.master_clients}"
     master_services = "${local.master_services}"
-    #slave_clients = "${local.slave_clients}"
-    #slave_services = "${local.slave_services}"
+    slave_clients = "${local.slave_clients}"
+    slave_services = "${local.slave_services}"
   }
 }
 

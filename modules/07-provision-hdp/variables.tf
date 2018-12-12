@@ -49,6 +49,11 @@ data "consul_keys" "hdp" {
   }
 
   key {
+    name = "slave_clients"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/slave_clients"
+  }
+
+  key {
     name = "slave_services"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/slave_services"
   }
