@@ -28,14 +28,14 @@ resource "consul_keys" "app" {
 
   key {
      path = "test/master/aws/test-instance/instance_ids"
-     value = "${join(",", aws_instance.test_instance.*.id)}"
+     value = "[${join(",", aws_instance.test_instance.*.id)}]"
    }
    key {
      path = "test/master/aws/test-instance/public_ips"
-     value = "${join(",", aws_instance.test_instance.*.public_ip)}"
+     value = "[${join(",", aws_instance.test_instance.*.public_ip)}]"
    }
    key {
      path = "test/master/aws/test-instance/public_dns"
-     value = "${join(",", aws_instance.test_instance.*.public_dns)}"
+     value = "[${join(",", aws_instance.test_instance.*.public_dns)}]"
   }
 }
