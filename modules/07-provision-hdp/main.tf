@@ -15,8 +15,8 @@ module "provision_hdp" {
 
 locals {
 
-  public_dns = "${provision_hdp.public_dns}" #"${list(data.consul_keys.app.var.public_dns)}"
-  public_ips = "${provision_hdp.public_ip}" #"${list(data.consul_keys.app.var.public_ips)}"
+  public_dns = "${module.provision_hdp.public_dns}"
+  public_ips = "${module.provision_hdp.public_ip}"
 
   ambari_host = "${local.public_dns[0]}"
   ambari_ip = "${local.public_ips[0]}"
