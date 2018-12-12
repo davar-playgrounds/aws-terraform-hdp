@@ -95,7 +95,7 @@ resource "null_resource" "passwordless_ssh" {
 
 resource "null_resource" "install_python_packages" {
   depends_on = [
-    "module.provision_hdp"
+    "null_resource.passwordless_ssh"
   ]
 
   provisioner "local-exec" {
