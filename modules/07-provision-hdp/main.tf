@@ -63,6 +63,9 @@ data "template_file" "ansible_hosts" {
 }
 
 resource "local_file" "ansible_hosts_rendered" {
+  depends_on = [
+    "module.provision_hdp"
+  ]
   content  = "${data.template_file.ansible_hosts.rendered}"
   filename = "${local.workdir}/output/ansible-hosts"
 }
@@ -84,17 +87,29 @@ data "template_file" "hdp_config" {
 }
 
 resource "local_file" "hdp_config_rendered" {
+  depends_on = [
+    "module.provision_hdp"
+  ]
+
   content  = "${data.template_file.hdp_config.rendered}"
   filename = "${local.workdir}/output/hdp-cluster-config.yml"
 }
 
 resource "null_resource" "passwordless_ssh" {
+  depends_on = [
+    "module.provision_hdp"
+  ]
+
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${path.module}/resources/passwordless-ssh.yml"
   }
 }
 
 resource "null_resource" "install_python_packages" {
+  depends_on = [
+    "module.provision_hdp"
+  ]
+
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${path.module}/resources/install-python-packages.yml"
   }
