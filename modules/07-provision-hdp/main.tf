@@ -7,7 +7,16 @@
 
 locals {
 
+  /*
   ambari-host = "${data.consul_keys.app.var.public_dns_ambari}"
+  ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
+  master-host = "${data.consul_keys.app.var.public_dns_namenode}"
+  master-ip = "${data.consul_keys.app.var.public_ip_namenode}"
+  slave-host = "${data.consul_keys.app.var.public_dns_datanode}"
+  slave-ip = "${data.consul_keys.app.var.public_ip_datanode}"
+  */
+
+  ambari-host = "${data.consul_keys.app.var.public_dns[0]}"
   ambari-ip = "${data.consul_keys.app.var.public_ip_ambari}"
   master-host = "${data.consul_keys.app.var.public_dns_namenode}"
   master-ip = "${data.consul_keys.app.var.public_ip_namenode}"

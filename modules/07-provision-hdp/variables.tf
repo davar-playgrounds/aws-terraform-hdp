@@ -15,31 +15,35 @@ variable "hdp_spec" {
 data "consul_keys" "app" {
   # ambari
   key {
-    name    = "public_dns_ambari"
-    path    = "${var.path_in_consul}/public_dns_ambari"
+    #name    = "public_dns_ambari"
+    name    = "public_dns"
+    #path    = "${var.path_in_consul}/public_dns_ambari"
+    path    = "${var.path_in_consul}/public_dns"
   }
   key {
-    name    = "public_ip_ambari"
-    path    = "${var.path_in_consul}/public_ip_ambari"
+    #name    = "public_ip_ambari"
+    #path    = "${var.path_in_consul}/public_ip_ambari"
+    name    = "public_ips"
+    path    = "${var.path_in_consul}/public_ips"
   }
   # namenode
-  key {
-    name    = "public_dns_namenode"
-    path    = "${var.path_in_consul}/public_dns_namenode"
-  }
-  key {
-    name    = "public_ip_namenode"
-    path    = "${var.path_in_consul}/public_ip_namenode"
-  }
+  #key {
+    #name    = "public_dns_namenode"
+    #path    = "${var.path_in_consul}/public_dns_namenode"
+  #}
+#  key {
+#    name    = "public_ip_namenode"
+#    path    = "${var.path_in_consul}/public_ip_namenode"
+#  }
   # datanode
-  key {
-    name    = "public_dns_datanode"
-    path    = "${var.path_in_consul}/public_dns_datanode"
-  }
-  key {
-    name    = "public_ip_datanode"
-    path    = "${var.path_in_consul}/public_ip_datanode"
-  }
+  #key {
+  #  name    = "public_dns_datanode"
+  #  path    = "${var.path_in_consul}/public_dns_datanode"
+  #}
+  #key {
+  #  name    = "public_ip_datanode"
+  #  path    = "${var.path_in_consul}/public_ip_datanode"
+  #}
 }
 
 data "consul_keys" "hdp" {
