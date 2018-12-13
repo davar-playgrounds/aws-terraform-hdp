@@ -17,6 +17,7 @@ data "consul_keys" "hdp" {
     name = "hdp_cluster_name"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/cluster_name"
   }
+}
 
 data "consul_keys" "hdp" {
   key {
