@@ -18,6 +18,7 @@ locals {
   slave_ip = "${local.public_ips[2]}"
 
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
+  no_instances = "${data.consul_keys.hdp.var.no_instances}"
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
   hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
