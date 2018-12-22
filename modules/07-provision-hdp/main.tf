@@ -89,7 +89,7 @@ resource "local_file" "ansible_hdp_cluster_inventory" {
   count = "${1 - local.single}"
 
   content  = "${data.template_file.ansible_inventory.rendered}"
-  filename = "${local.workdir}/output/ansible-hosts"
+  filename = "${local.workdir}/ansible-hosts"
 }
 
 ###########################################
