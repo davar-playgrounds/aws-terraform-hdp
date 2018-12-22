@@ -5,17 +5,21 @@ module "provision_hdp" {
 
 locals {
 
+  workdir="${path.cwd}/output/hdp-server/${local.clustername}"
+
   public_dns = "${module.provision_hdp.public_dns}"
   public_ips = "${module.provision_hdp.public_ip}"
 
-  ambari_host = "${local.public_dns[0]}"
-  ambari_ip = "${local.public_ips[0]}"
+  ## variables for cluster
 
-  master_host = "${local.public_dns[1]}"
-  master_ip = "${local.public_ips[1]}"
+  ambari_ips = "${local.public_ips[0]}"
+  ambari_dns = "${local.public_dns[0]}" # first server is Ambari server - no matter if single or cluster
+  # namenode_dns holds value of dns for the HDP cluster (Ambari server excluded)
+  node_ips = "${slice(local.public_ips, 1, length(local.public_ips))}"
+  node_dns = "${slice(local.public_dns, 1, length(local.public_dns))}"
 
-  slave_host = "${local.public_dns[2]}"
-  slave_ip = "${local.public_ips[2]}"
+
+  ## variables for HDP
 
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}"
   no_instances = "${data.consul_keys.hdp.var.no_instances}"
@@ -28,31 +32,65 @@ locals {
   master_services = "${data.consul_keys.hdp.var.master_services}"
   slave_clients = "${data.consul_keys.hdp.var.slave_clients}"
   slave_services = "${data.consul_keys.hdp.var.slave_services}"
+  single = "${local.no_instances == 1 ? 1 : 0}" # is it a single node or multi?
 
-  workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 }
 
-# prepare hosts file
-data "template_file" "ansible_hosts" {
-  template = "${file("${path.module}/resources/templates/ansible-hosts.tmpl")}"
+###################
+### SINGLE ###
+###################
+
+data "template_file" "ansible_hdp_single" {
+  template = "${file("${path.module}/resources/templates/ansible_hdp_single.yml.tmpl")}"
 
   vars {
-    ambari_host = "${local.ambari_host}"
-    ambari_ip = "${local.ambari_ip}"
-    master_host = "${local.master_host}"
-    master_ip = "${local.master_ip}"
-    slave_host = "${local.slave_host}"
-    slave_ip = "${local.slave_ip}"
+    ansible_hdp_master_name = "${local.public_dns[0]}"
+    ansible_hdp_master_hosts = "${local.public_ips[0]}"
+    ansible_user = "${local.template_user}"
+    ansible_password = "${local.template_password}"
   }
 }
 
-resource "local_file" "ansible_hosts_rendered" {
-  depends_on = [
-    "module.provision_hdp"
-  ]
-  content  = "${data.template_file.ansible_hosts.rendered}"
+# create the yaml file based on template and the input values
+resource "local_file" "ansible_hdp_single_inventory" {
+  count = "${local.single}"
+
+  content  = "${data.template_file.ansible_hdp_single.rendered}"
   filename = "${local.workdir}/output/ansible-hosts"
 }
+
+###################
+### CLUSTER ###
+###################
+# first the hostnames are generated - the hostnames are for the HDP cluster itself
+data "template_file" "generate_hostnames" {
+  count = "${length(local.node_dns)}"
+  template = "${file("templates/hostname.tmpl")}"
+
+  vars {
+    node-text = "${element(local.node_ips, count.index)} ansible_host=${element(local.node_dns, count.index)} ansible_user=${local.template_user} ansible_password=${local.template_password}"
+  }
+}
+
+# the ansible-hosts is rendered here
+data "template_file" "ansible_inventory" {
+  template = "${file("templates/ansible_hdp_cluster.yml.tmpl")}"
+  vars {
+    ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=${local.template_user} ansible_password=${local.template_password}"
+    node-ansible-text = "${join("",data.template_file.generate_hostnames.*.rendered)}"
+  }
+}
+
+# create the yaml file based on template and the input values
+resource "local_file" "ansible_hdp_cluster_inventory" {
+  count = "${1 - local.single}"
+
+  content  = "${data.template_file.ansible_inventory.rendered}"
+  filename = "${local.workdir}/output/ansible-hosts"
+}
+
+###########################################
+
 
 # prepare hdp config file
 data "template_file" "hdp_config" {
