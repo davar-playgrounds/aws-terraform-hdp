@@ -46,8 +46,6 @@ data "template_file" "ansible_hdp_single" {
   vars {
     ansible_hdp_master_name = "${local.public_dns[0]}"
     ansible_hdp_master_hosts = "${local.public_ips[0]}"
-    ansible_user = "${local.template_user}"
-    ansible_password = "${local.template_password}"
   }
 }
 
@@ -68,7 +66,7 @@ data "template_file" "generate_hostnames" {
   template = "${file("templates/hostname.tmpl")}"
 
   vars {
-    node-text = "${element(local.node_ips, count.index)} ansible_host=${element(local.node_dns, count.index)} ansible_user=${local.template_user} ansible_password=${local.template_password}"
+    node-text = "${element(local.node_ips, count.index)} ansible_host=${element(local.node_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa""
   }
 }
 
@@ -76,7 +74,7 @@ data "template_file" "generate_hostnames" {
 data "template_file" "ansible_inventory" {
   template = "${file("templates/ansible_hdp_cluster.yml.tmpl")}"
   vars {
-    ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=${local.template_user} ansible_password=${local.template_password}"
+    ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file="~/.ssh/id_rsa""
     node-ansible-text = "${join("",data.template_file.generate_hostnames.*.rendered)}"
   }
 }
