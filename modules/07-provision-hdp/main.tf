@@ -147,7 +147,7 @@ resource "null_resource" "install_python_packages" {
 resource "null_resource" "prepare_nodes" {
   depends_on = [
     "null_resource.install_python_packages",
-    "local_file.ansible_hosts_rendered",
+    "local_file.ansible_hdp_cluster_inventory",
     "local_file.hdp_config_rendered",
   ]
   provisioner "local-exec" {
