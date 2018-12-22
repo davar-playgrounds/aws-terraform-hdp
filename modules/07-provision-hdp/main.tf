@@ -63,7 +63,7 @@ resource "local_file" "ansible_hdp_single_inventory" {
 # first the hostnames are generated - the hostnames are for the HDP cluster itself
 data "template_file" "generate_hostnames" {
   count = "${length(local.node_dns)}"
-  template = "${file("templates/hostname.tmpl")}"
+  template = "${file("${path.module}/resources/templates/hostname.tmpl")}"
 
   vars {
     node-text = "${element(local.node_ips, count.index)} ansible_host=${element(local.node_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
@@ -72,7 +72,7 @@ data "template_file" "generate_hostnames" {
 
 # the ansible-hosts is rendered here
 data "template_file" "ansible_inventory" {
-  template = "${file("templates/ansible_hdp_cluster.yml.tmpl")}"
+  template = "${file("${path.module}/resources/templates/ansible_hdp_cluster.yml.tmpl")}"
   vars {
     ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
     node-ansible-text = "${join("",data.template_file.generate_hostnames.*.rendered)}"
