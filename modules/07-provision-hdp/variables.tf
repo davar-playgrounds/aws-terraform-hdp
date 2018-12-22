@@ -9,7 +9,7 @@ variable "path_in_consul_hdp" {
 }
 
 variable "hdp_spec" {
-  default = "/output/hdp-cluster-config.yml"
+  default = "/hdp-cluster-config.yml"
 }
 
 data "consul_keys" "hdp" {
