@@ -34,7 +34,10 @@ locals {
   slave_services = "${data.consul_keys.hdp.var.slave_services}"
   single = "${local.no_instances == 1 ? 1 : 0}" # is it a single node or multi?
 
-  hdp_config_tmpl = "${local.single == 1 ? hdp-single-config.tmpl : hdp-cluster-config.tmpl}"
+
+  hdp_single_config_tmpl = "hdp-single-config.tmpl"
+  hdp_cluster_config_tmpl = "hdp-cluster-config.tmpl"
+  hdp_config_tmpl = "${local.single == 1 ? local.hdp_single_config_tmpl : local.hdp_cluster_config_tmpl}"
 
 }
 
