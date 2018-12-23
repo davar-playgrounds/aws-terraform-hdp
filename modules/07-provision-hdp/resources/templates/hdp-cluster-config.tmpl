@@ -171,10 +171,20 @@ blueprint_dynamic:                                        # properties for the d
     services:
       ${ambari_services}
 
-  - host_group: "hdp-master"
+  - host_group: "hdp-master-01"
     clients: ${master_clients}
     services:
       ${master_services}
+
+  - host_group: "hdp-master-02"
+    clients: ${master_clients}
+    services:
+      ${master_services}
+
+  - host_group: "hdp-worker"
+    clients: ${slave_clients}
+    services:
+      ${slave_services}
 
 ############################
 ## helper variables ##                                    # don't change these unless there is a good reason

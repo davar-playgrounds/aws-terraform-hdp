@@ -10,14 +10,22 @@ locals {
   public_dns = "${module.provision_hdp.public_dns}"
   public_ips = "${module.provision_hdp.public_ip}"
 
+  ########################
   ## variables for cluster
-
+  ## first server is ambari
   ambari_ips = "${local.public_ips[0]}"
   ambari_dns = "${local.public_dns[0]}" # first server is Ambari server - no matter if single or cluster
   # namenode_dns holds value of dns for the HDP cluster (Ambari server excluded)
-  node_ips = "${slice(local.public_ips, 1, length(local.public_ips))}"
-  node_dns = "${slice(local.public_dns, 1, length(local.public_dns))}"
 
+  ## server 2 and 3 are namenodes
+  namenode_1_dns = "${local.public_dns[1]}"
+  namenode_1_ips = "${local.public_ips[1]}"
+  namenode_2_dns = "${local.public_dns[2]}"
+  namenode_2_ips = "${local.public_ips[2]}"
+
+  ## rest of the servers are datanodes
+  datanodes_dns = "${slice(local.public_dns, 3, length(local.public_dns))}"
+  datanodes_ips = "${slice(local.public_ips, 3, length(local.public_ips))}"
 
   ## variables for HDP
 
@@ -66,12 +74,12 @@ resource "local_file" "ansible_hdp_single_inventory" {
 ### CLUSTER ###
 ###################
 # first the hostnames are generated - the hostnames are for the HDP cluster itself
-data "template_file" "generate_hostnames" {
-  count = "${local.no_instances - 1}" # "${length(local.node_dns)}"
-  template = "${file("${path.module}/resources/templates/hostname.tmpl")}"
+data "template_file" "generate_datanode_hostname" {
+  count = "${length(local.datanodes_dns)}"
+  template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
 
   vars {
-    node-text = "${element(local.node_ips, count.index)} ansible_host=${element(local.node_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    datanode-text = "${element(local.datanodes_ips, count.index)} ansible_host=${element(local.datanodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
   }
 }
 
@@ -80,7 +88,9 @@ data "template_file" "ansible_inventory" {
   template = "${file("${path.module}/resources/templates/ansible_hdp_cluster.yml.tmpl")}"
   vars {
     ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
-    node-ansible-text = "${join("",data.template_file.generate_hostnames.*.rendered)}"
+    namenode1-ansible-text = "${local.namenode_1_ips} ambari_host=${local.namenode_1_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    namenode2-ansible-text = "${local.namenode_2_ips} ambari_host=${local.namenode_2_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    datanode-ansible-text = "${join("",data.template_file.generate_datanode_hostname.*.rendered)}"
   }
 }
 
