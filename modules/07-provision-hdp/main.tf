@@ -76,7 +76,7 @@ resource "local_file" "ansible_hdp_single_inventory" {
 ###################
 # first the hostnames are generated - the hostnames are for the HDP cluster itself
 data "template_file" "generate_datanode_hostname" {
-  count = "${length(local.datanodes_dns)}"
+  count = "${local.no_instances - 3}" #"${length(local.datanodes_dns)}"
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
 
   vars {
@@ -195,8 +195,9 @@ resource "null_resource" "configure_postgres" {
     connection {
       type     = "ssh"
       host     = "${local.public_ips[0]}"
-      user     = "${local.template_user}"
-      password = "${local.template_password}"
+      user     = "centos" #"${local.template_user}"
+      private_key = "${file("/home/centos/.ssh/id_rsa")}"
+      #password = "${local.template_password}"
     }
     script = "${path.module}/resources/scripts/config_postgres.sh"
   }

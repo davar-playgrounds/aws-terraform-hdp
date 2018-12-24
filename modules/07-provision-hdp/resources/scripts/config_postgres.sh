@@ -1,15 +1,15 @@
 echo "### Install postgresql-jdbc ###"
 # yum install of postgres is available!
-yum -y install postgresql-jdbc
+sudo yum -y install postgresql-jdbc
 
 #chmod 744 /usr/share/java/postgresql-jdbc.jar
 
 # run on ambari server
 echo "### Register postgresql-jdbc.jar with ambari-server ###"
-ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
+sudo ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
 
 #tee /var/lib/pgsql/data/pg_hba.conf <<EOF
-tee /var/lib/pgsql/9.6/data/pg_hba.conf <<EOF
+sudo tee /var/lib/pgsql/9.6/data/pg_hba.conf <<EOF
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 host  all  all 0.0.0.0/0 md5
 
@@ -31,7 +31,7 @@ host  all   ambari,mapred ::/0 md5
 EOF
 
 #service postgresql restart
-service postgresql-9.6.service restart
+sudo service postgresql-9.6.service restart
 
 echo "GRANT ALL PRIVILEGES ON DATABASE postgres to postgres;" > /tmp/hdp_postgres_setup.sql
 
