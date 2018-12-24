@@ -39,6 +39,11 @@ data "consul_keys" "hdp" {
   }
 
   key {
+    name = "database"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/database"
+  }
+
+  key {
     name = "ambari_services"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/ambari_services"
   }

@@ -34,6 +34,7 @@ locals {
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
   hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
+  database = "${data.consul_keys.hdp.var.database}"
 
   ambari_services = "${data.consul_keys.hdp.var.ambari_services}"
   master_clients = "${data.consul_keys.hdp.var.master_clients}"
