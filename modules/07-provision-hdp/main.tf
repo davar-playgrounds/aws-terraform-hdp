@@ -114,6 +114,7 @@ data "template_file" "hdp_config" {
     ambari_version = "${local.ambari_version}"
     hdp_version = "${local.hdp_version}"
     hdp_build_number = "${local.hdp_build_number}"
+    database = "${local.database}"
     ambari_services = "${local.ambari_services}"
     master_clients = "${local.master_clients}"
     master_services = "${local.master_services}"
@@ -164,7 +165,7 @@ resource "null_resource" "prepare_nodes" {
     "local_file.hdp_config_rendered",
   ]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static ${path.module}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
   }
 }
 
@@ -182,8 +183,26 @@ resource "null_resource" "configure_ambari" {
   }
 }
 
+## configure postgres for Ranger and Ranger KMS
+resource "null_resource" "configure_postgres" {
+  depends_on = [
+    "null_resource.configure_ambari",
+  ]
+
+  # install, configure and prepare DB objects for Ranger and RangerKMS
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      host     = "${local.public_ips[0]}"
+      user     = "${local.template_user}"
+      password = "${local.template_password}"
+    }
+    script = "${path.module}/resources/scripts/config_postgres.sh"
+  }
+}
+
 resource "null_resource" "apply_blueprint" {
-  depends_on = ["null_resource.configure_ambari"]
+  depends_on = ["null_resource.configure_postgres"]
   provisioner "local-exec" {
     command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml"
   }
