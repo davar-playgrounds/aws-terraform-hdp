@@ -10,6 +10,11 @@ locals {
   public_dns = "${module.provision_hdp.public_dns}"
   public_ips = "${module.provision_hdp.public_ip}"
 
+  # indices to create the dynamic code in case single node cluster is also used
+  namenode_1_idx = "${local.no_instances == 1 ? 0 : 1}"
+  namenode_2_idx = "${local.no_instances == 1 ? 0 : 2}"
+  datanode_idx = "${local.no_instances == 1 ? 0 : 3}"
+
   ########################
   ## variables for cluster
   ## first server is ambari
@@ -18,14 +23,14 @@ locals {
   # namenode_dns holds value of dns for the HDP cluster (Ambari server excluded)
 
   ## server 2 and 3 are namenodes
-  namenode_1_dns = "${local.public_dns[1]}"
-  namenode_1_ips = "${local.public_ips[1]}"
-  namenode_2_dns = "${local.public_dns[2]}"
-  namenode_2_ips = "${local.public_ips[2]}"
+  namenode_1_dns = "${local.public_dns[local.namenode_1_idx]}"
+  namenode_1_ips = "${local.public_ips[local.namenode_1_idx]}"
+  namenode_2_dns = "${local.public_dns[local.namenode_2_idx]}"
+  namenode_2_ips = "${local.public_ips[local.namenode_2_idx]}"
 
   ## rest of the servers are datanodes
-  datanodes_dns = "${slice(local.public_dns, 3, length(local.public_dns))}"
-  datanodes_ips = "${slice(local.public_ips, 3, length(local.public_ips))}"
+  datanodes_dns = "${slice(local.public_dns, local.datanode_idx, length(local.public_dns))}"
+  datanodes_ips = "${slice(local.public_ips, local.datanode_idx, length(local.public_ips))}"
 
   ## variables for HDP
 
@@ -76,7 +81,7 @@ resource "local_file" "ansible_hdp_single_inventory" {
 ###################
 # first the hostnames are generated - the hostnames are for the HDP cluster itself
 data "template_file" "generate_datanode_hostname" {
-  count = "${length(local.datanodes_dns)}"
+  #count = "${length(local.datanodes_dns)}"
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
 
   vars {
