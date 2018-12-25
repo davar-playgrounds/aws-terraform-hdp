@@ -8,8 +8,10 @@ sudo yum -y install postgresql-jdbc
 echo "### Register postgresql-jdbc.jar with ambari-server ###"
 sudo ambari-server setup --jdbc-db=postgres --jdbc-driver=/usr/share/java/postgresql-jdbc.jar
 
-#tee /var/lib/pgsql/data/pg_hba.conf <<EOF
-sudo tee /var/lib/pgsql/9.6/data/pg_hba.conf <<EOF
+# tee /var/lib/pgsql/data/pg_hba.conf <<EOF
+# sudo tee /var/lib/pgsql/9.6/data/pg_hba.conf <<EOF
+PG_HBA_CONF=$(sudo find / -name "pg_hba.conf")
+sudo tee $PG_HBA_CONF <<EOF
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 host  all  all 0.0.0.0/0 md5
 
@@ -32,6 +34,7 @@ EOF
 
 #service postgresql restart
 sudo service postgresql-9.6.service restart
+sudo service postgresql.service restart
 
 echo "GRANT ALL PRIVILEGES ON DATABASE postgres to postgres;" > /tmp/hdp_postgres_setup.sql
 
