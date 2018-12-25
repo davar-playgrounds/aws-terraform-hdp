@@ -76,7 +76,7 @@ resource "local_file" "ansible_hdp_single_inventory" {
 ###################
 # first the hostnames are generated - the hostnames are for the HDP cluster itself
 data "template_file" "generate_datanode_hostname" {
-  count = "${local.no_instances - 3}" #"${length(local.datanodes_dns)}"
+  count = "${length(local.datanodes_dns)}"
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
 
   vars {
