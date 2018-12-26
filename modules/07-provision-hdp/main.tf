@@ -51,7 +51,8 @@ locals {
 
   hdp_single_config_tmpl = "hdp-single-config.tmpl"
   hdp_cluster_config_tmpl = "hdp-cluster-config.tmpl"
-  hdp_config_tmpl = "${local.single == 1 ? local.hdp_single_config_tmpl : local.hdp_cluster_config_tmpl}"
+  #hdp_config_tmpl = "${local.single == 1 ? local.hdp_single_config_tmpl : local.hdp_cluster_config_tmpl}"
+  hdp_config_tmpl = "hdp-config.tmpl"
 
 }
 
@@ -110,7 +111,16 @@ resource "local_file" "ansible_hdp_cluster_inventory" {
 
 ###########################################
 
+#generate the blueprint_dynamic block of the hdp-config file
+data "template_file" "generate_blueprint_dynamic" {
+  template = "${file("${path.module}/resources/templates/blueprint_dynamic_single.tmpl")}"
+  vars {
+    master_clients = "${local.master_clients}"
+    master_services = "${local.master_services}"
+  }
+}
 
+##
 # prepare hdp config file
 data "template_file" "hdp_config" {
   template = "${file("${path.module}/resources/templates/${local.hdp_config_tmpl}")}"
@@ -126,6 +136,7 @@ data "template_file" "hdp_config" {
     master_services = "${local.master_services}"
     slave_clients = "${local.slave_clients}"
     slave_services = "${local.slave_services}"
+    blueprint_dynamic = "${join("",data.template_file.generate_blueprint_dynamic.*.rendered)}"
   }
 }
 
