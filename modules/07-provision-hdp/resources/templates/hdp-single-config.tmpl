@@ -97,7 +97,7 @@ database_options:
 ##########################
 
 ranger_options:                                           # only used if RANGER_ADMIN is part of the blueprint stack
-  enable_plugins: yes                                     # set to 'yes' if the plugins should be enabled for all of the installed services
+  enable_plugins: no                                     # set to 'yes' if the plugins should be enabled for all of the installed services
 
 ranger_security_options:                                  # only used if RANGER_ADMIN is part of the blueprint stack
   ranger_admin_password: "{{ default_password }}"         # the password for the Ranger admin users (both admin and amb_ranger_admin)
