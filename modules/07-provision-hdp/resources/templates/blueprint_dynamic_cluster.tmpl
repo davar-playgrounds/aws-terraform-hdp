@@ -1,0 +1,19 @@
+- host_group: "ambari-services"
+    clients: []
+    services:
+      ${ambari_services}
+
+- host_group: "hdp-master-01"
+    clients: ${master_clients}
+    services:
+      ${master_services}
+
+- host_group: "hdp-master-02"
+    clients: ${master_clients}
+    services:
+      ${master_services}
+
+- host_group: "hdp-worker"
+    clients: ${slave_clients}
+    services:
+      ${slave_services}

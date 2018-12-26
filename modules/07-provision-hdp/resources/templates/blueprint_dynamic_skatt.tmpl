@@ -1,3 +1,8 @@
+- host_group: "ambari-services"
+    clients: []
+    services:
+      ${ambari_services}
+
 - host_group: "hdp-master"
     clients: ${master_clients}
     services:

@@ -7,12 +7,13 @@ variable "path_in_consul" {
 variable "path_in_consul_hdp" {
   default   = "test/master/aws/"
 }
-/*
-variable "hdp_spec" {
-  default = "/hdp-cluster-config.yml"
-}
-*/
+
 data "consul_keys" "hdp" {
+  key {
+    name = "type"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/type"
+  }
+
   key {
     name = "no_instances"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/no_instances"
