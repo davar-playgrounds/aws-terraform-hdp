@@ -121,7 +121,7 @@ data "template_file" "generate_namenode_hostname_classic" {
 
   vars {
     host-group-name = "[hdp-master-0${count.index + 1}]"
-    namenode-text = "${element(local.namenodes_ips, count.index)} ansible_host=${element(local.namenodes_dns, count.index)} ansible_user=${local.template_user} ansible_password=${local.template_password}"
+    namenode-text = "${element(local.namenodes_ips, count.index)} ansible_host=${element(local.namenodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
   }
 }
 
