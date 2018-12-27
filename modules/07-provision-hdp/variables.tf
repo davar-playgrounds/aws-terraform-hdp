@@ -20,6 +20,12 @@ data "consul_keys" "hdp" {
   }
 
   key {
+    name = "no_namenodes"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/no_namenodes"
+    default = "2"
+  }
+
+  key {
     name = "hdp_cluster_name"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/cluster_name"
   }

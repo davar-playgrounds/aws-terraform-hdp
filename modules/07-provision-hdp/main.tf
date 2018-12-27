@@ -6,6 +6,9 @@ module "provision_hdp" {
 # all variables used in the script are in locals block
 locals {
 
+  no_instances = "${data.consul_keys.hdp.var.no_instances}" # number of servers in cluster
+  no_namenodes = "${data.consul_keys.hdp.var.no_instances}" # number of namenodes in cluster
+
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 
   ## all DNS and IP needed for the Hadoop cluster
@@ -23,17 +26,21 @@ locals {
   # indices to create the dynamic code in case single node cluster is also used
   # if a single node cluster -> indices are 0, else second server is namenode 1,
   # third server is namenode 2 and all the others are datanodes
-  namenode_1_idx = "${local.no_instances == 1 ? 0 : 1}"
-  namenode_2_idx = "${local.no_instances == 1 ? 0 : 2}"
-  datanode_idx = "${local.no_instances == 1 ? 0 : 3}"
+  #namenode_1_idx = "${local.no_instances == 1 ? 0 : 1}"
+  #namenode_2_idx = "${local.no_instances == 1 ? 0 : 2}"
+  namenode_idx = "${local.no_instances == 1 ? 0 : 1}"
+  datanode_idx = "${local.no_instances == 1 ? 0 : 1 + local.no_namenodes}"
 
 
-  # server 2 and 3 are namenodes
+  # next no_namenodes servers are dedicated namenodes
+  # namenode_dns holds value of dns for the HDP cluster (Ambari server excluded)
   # these are only used when multinode cluster, otherwise they point to first server
-  namenode_1_dns = "${local.public_dns[local.namenode_1_idx]}"
-  namenode_1_ips = "${local.public_ips[local.namenode_1_idx]}"
-  namenode_2_dns = "${local.public_dns[local.namenode_2_idx]}"
-  namenode_2_ips = "${local.public_ips[local.namenode_2_idx]}"
+  #namenode_1_dns = "${local.public_dns[local.namenode_1_idx]}"
+  #namenode_1_ips = "${local.public_ips[local.namenode_1_idx]}"
+  #namenode_2_dns = "${local.public_dns[local.namenode_2_idx]}"
+  #namenode_2_ips = "${local.public_ips[local.namenode_2_idx]}"
+  namenodes_dns = "${slice(local.public_dns, local.namenode_idx, local.namenode_idx + local.no_namenodes)}"
+  namenodes_ips = "${slice(local.public_ips, local.namenode_idx, local.namenode_idx + local.no_namenodes)}"
 
   ## if multinode cluster: rest of the servers are datanodes (from and including server 4)
   datanodes_dns = "${slice(local.public_dns, local.datanode_idx, length(local.public_dns))}"
@@ -43,9 +50,8 @@ locals {
   ### variables for HDP ###
   #########################
 
-  type = "${data.consul_keys.hdp.var.type}" # single, classic or skatt
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}" # name of HDP cluster
-  no_instances = "${data.consul_keys.hdp.var.no_instances}" # number of servers in cluster
+  type = "${data.consul_keys.hdp.var.type}" # single, classic or skatt
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
   hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
@@ -101,11 +107,21 @@ resource "local_file" "ansible_inventory_single" {
 # generate a datanode file - one datanode per line
 # this file is used later in the process to render the ansible-hosts file
 data "template_file" "generate_datanode_hostname_classic" {
-  count = "${local.type == "classic" ? 1 : 0}"
+  count = "${local.type == "classic" ? local.no_instances - 3 : 0}" # workaround
   #count = "${length(local.datanodes_dns)}" # do i need this to be repeated n-times?
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
   vars {
     datanode-text = "${element(local.datanodes_ips, count.index)} ansible_host=${element(local.datanodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+  }
+}
+
+data "template_file" "generate_namenode_hostname_classic" {
+  count = "${length(local.namenodes_dns)}"
+  template = "${file("${path.module}/resources/templates/namenode_hostname.tmpl")}"
+
+  vars {
+    host-group-name = "[hdp-master-0${count.index + 1}]"
+    namenode-text = "${element(local.namenodes_ips, count.index)} ansible_host=${element(local.namenodes_dns, count.index)} ansible_user=${local.template_user} ansible_password=${local.template_password}"
   }
 }
 
@@ -117,10 +133,11 @@ data "template_file" "ansible_inventory_classic" {
   vars {
     ambari-services-title = "[ambari-services]"
     ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
-    hdp-master-01-title = "[hdp-master-01]"
-    namenode1-ansible-text = "${local.namenode_1_ips} ambari_host=${local.namenode_1_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
-    hdp-master-02-title = "[hdp-master-02]"
-    namenode2-ansible-text = "${local.namenode_2_ips} ambari_host=${local.namenode_2_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    #hdp-master-01-title = "[hdp-master-01]"
+    #namenode1-ansible-text = "${local.namenode_1_ips} ambari_host=${local.namenode_1_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    #hdp-master-02-title = "[hdp-master-02]"
+    #namenode2-ansible-text = "${local.namenode_2_ips} ambari_host=${local.namenode_2_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    namenode-ansible-text = "${join("",data.template_file.generate_namenode_hostname_classic.*.rendered)}"
     hdp-worker-title = "[hdp-worker]"
     datanode-ansible-text = "${join("",data.template_file.generate_datanode_hostname_classic.*.rendered)}"
   }
