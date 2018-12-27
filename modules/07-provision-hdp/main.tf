@@ -74,9 +74,9 @@ locals {
 # the template file is populated with variables, no interim file is used
 
 # populate the template file with variables
-data "template_file" "ansible_hdp_single" {
+data "template_file" "ansible_inventory_single" {
   count = "${local.type == "single" ? 1 : 0}"
-  template = "${file("${path.module}/resources/templates/ansible_hdp_single.yml.tmpl")}"
+  template = "${file("${path.module}/resources/templates/ansible_inventory_single.yml.tmpl")}"
 
   vars {
     ansible_hdp_master_name = "${local.public_dns[0]}"
@@ -87,7 +87,7 @@ data "template_file" "ansible_hdp_single" {
 # create the yaml file based on template and the input values
 resource "local_file" "ansible_inventory_single" {
   count = "${local.type == "single" ? 1 : 0}" # execute if single
-  content  = "${data.template_file.ansible_hdp_single.rendered}"
+  content  = "${data.template_file.ansible_inventory_single.rendered}"
   filename = "${local.workdir}/ansible-hosts"
 }
 ###
@@ -113,7 +113,7 @@ data "template_file" "generate_datanode_hostname_classic" {
 # populate the cluster template file
 data "template_file" "ansible_inventory_classic" {
   count = "${local.type == "classic" ? 1 : 0}"
-  template = "${file("${path.module}/resources/templates/ansible_hdp_cluster.yml.tmpl")}"
+  template = "${file("${path.module}/resources/templates/ansible_inventory_cluster.yml.tmpl")}"
   vars {
     ambari-services-title = "[ambari-services]"
     ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
