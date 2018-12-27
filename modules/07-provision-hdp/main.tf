@@ -85,7 +85,7 @@ data "template_file" "ansible_hdp_single" {
 }
 
 # create the yaml file based on template and the input values
-resource "local_file" "ansible_hdp_single_inventory" {
+resource "local_file" "ansible_inventory_single" {
   count = "${local.type == "single" ? 1 : 0}" # execute if single
   content  = "${data.template_file.ansible_hdp_single.rendered}"
   filename = "${local.workdir}/ansible-hosts"
@@ -156,10 +156,17 @@ data "template_file" "ansible_inventory_skatt" {
 */
 
 # create the yaml file based on template and the input values
-resource "local_file" "ansible_hdp_cluster_inventory" {
+resource "local_file" "ansible_hdp_cluster_inventory_single" {
+  count = "${local.single}"
+
+  content  = "${data.template_file.ansible_inventory_single.rendered}"
+  filename = "${local.workdir}/ansible-hosts"
+}
+
+resource "local_file" "ansible_hdp_cluster_inventory_classic" {
   count = "${1 - local.single}"
 
-  content  = "${data.template_file.ansible_inventory_local.type.rendered}"
+  content  = "${data.template_file.ansible_inventory_classic.rendered}"
   filename = "${local.workdir}/ansible-hosts"
 }
 
@@ -220,7 +227,8 @@ data "template_file" "hdp_config" {
     hdp_build_number = "${local.hdp_build_number}"
     database = "${local.database}"
     # use data.template_file depending on whether single or cluster
-    blueprint_dynamic = "${join("",data.template_file.generate_blueprint_dynamic_local.type.*.rendered)}"
+    #blueprint_dynamic = "${join("",data.template_file.generate_blueprint_dynamic_local.type.*.rendered)}"
+    blueprint_dynamic = "${local.type == "single" ? join("", data.template_file.generate_blueprint_dynamic_single.*.rendered) : join("", data.template_file.generate_blueprint_dynamic_cluster.*.rendered)}"
   }
 }
 
