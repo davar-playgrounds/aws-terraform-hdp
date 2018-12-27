@@ -83,13 +83,13 @@ data "template_file" "ansible_inventory_single" {
     ansible_hdp_master_hosts = "${local.public_ips[0]}"
   }
 }
-
+/*
 # create the yaml file based on template and the input values
 resource "local_file" "ansible_inventory_single" {
   count = "${local.type == "single" ? 1 : 0}" # execute if single
   content  = "${data.template_file.ansible_inventory_single.rendered}"
   filename = "${local.workdir}/ansible-hosts"
-}
+}*/
 ###
 
 ### CLUSTER ###
@@ -157,14 +157,16 @@ data "template_file" "ansible_inventory_skatt" {
 
 # create the yaml file based on template and the input values
 resource "local_file" "ansible_inventory_single_render" {
-  count = "${local.single}"
+  #count = "${local.single}"
+  count = "${local.type == "single" ? 1 : 0}"
 
   content  = "${data.template_file.ansible_inventory_single.rendered}"
   filename = "${local.workdir}/ansible-hosts"
 }
 
 resource "local_file" "ansible_inventory_classic_render" {
-  count = "${1 - local.single}"
+  #count = "${1 - local.single}"
+  count = "${local.type == "classic" ? 1 : 0}"
 
   content  = "${data.template_file.ansible_inventory_classic.rendered}"
   filename = "${local.workdir}/ansible-hosts"
