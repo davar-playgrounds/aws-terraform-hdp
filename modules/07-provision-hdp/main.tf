@@ -107,7 +107,7 @@ resource "local_file" "ansible_inventory_single" {
 # generate a datanode file - one datanode per line
 # this file is used later in the process to render the ansible-hosts file
 data "template_file" "generate_datanode_hostname_classic" {
-  count = "${local.type == "classic" ? local.no_instances - 3 : 0}" # workaround
+  count = "${local.type == "classic" ? local.no_instances - local.no_namenodes : 0}" # workaround
   #count = "${length(local.datanodes_dns)}" # do i need this to be repeated n-times?
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
   vars {
@@ -116,7 +116,7 @@ data "template_file" "generate_datanode_hostname_classic" {
 }
 
 data "template_file" "generate_namenode_hostname_classic" {
-  count = "${length(local.namenodes_dns)}"
+  count = "${local.type == "classic" ? local.no_namenodes : 0}"
   template = "${file("${path.module}/resources/templates/namenode_hostname.tmpl")}"
 
   vars {
