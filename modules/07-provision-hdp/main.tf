@@ -156,14 +156,14 @@ data "template_file" "ansible_inventory_skatt" {
 */
 
 # create the yaml file based on template and the input values
-resource "local_file" "ansible_hdp_cluster_inventory_single" {
+resource "local_file" "ansible_inventory_single_render" {
   count = "${local.single}"
 
   content  = "${data.template_file.ansible_inventory_single.rendered}"
   filename = "${local.workdir}/ansible-hosts"
 }
 
-resource "local_file" "ansible_hdp_cluster_inventory_classic" {
+resource "local_file" "ansible_inventory_classic_render" {
   count = "${1 - local.single}"
 
   content  = "${data.template_file.ansible_inventory_classic.rendered}"
@@ -268,7 +268,8 @@ resource "null_resource" "install_python_packages" {
 resource "null_resource" "prepare_nodes" {
   depends_on = [
     "null_resource.install_python_packages",
-    "local_file.ansible_hdp_cluster_inventory",
+    "local_file.ansible_inventory_single_render",
+    "local_file.ansible_inventory_classic_render",
     "local_file.hdp_config_rendered"
   ]
   provisioner "local-exec" {
