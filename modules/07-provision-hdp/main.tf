@@ -6,8 +6,9 @@ module "provision_hdp" {
 # all variables used in the script are in locals block
 locals {
 
+  type = "${data.consul_keys.hdp.var.type}" # single, classic or skatt
   no_instances = "${data.consul_keys.hdp.var.no_instances}" # number of servers in cluster
-  no_namenodes = "${data.consul_keys.hdp.var.no_namenodes}" # number of namenodes in cluster
+  no_namenodes = "${local.type == "classic" ? data.consul_keys.hdp.var.no_namenodes : 0}" # number of namenodes in cluster
 
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 
@@ -51,7 +52,6 @@ locals {
   #########################
 
   clustername = "${data.consul_keys.hdp.var.hdp_cluster_name}" # name of HDP cluster
-  type = "${data.consul_keys.hdp.var.type}" # single, classic or skatt
   ambari_version = "${data.consul_keys.hdp.var.ambari_version}"
   hdp_version = "${data.consul_keys.hdp.var.hdp_version}"
   hdp_build_number = "${data.consul_keys.hdp.var.hdp_build_number}"
