@@ -21,7 +21,7 @@ data "consul_keys" "hdp" {
 
   key {
     name = "no_namenodes"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/no_namenodes"
+    #path = "${var.path_in_consul_hdp}${var.cluster_type}/no_namenodes"
     default = "2"
   }
 
