@@ -211,7 +211,7 @@ data "template_file" "generate_blueprint_dynamic_single" {
 
 # generate the block with n_namenodes and their clients and services
 data "template_file" "generate_blueprint_master_block" {
-  count = "${length(local.namenodes_dns)}"
+  count = "${local.type == "classic" ? local.no_namenodes : 0}"
   template = "${file("${path.module}/resources/templates/blueprint_dynamic_host_group_master.tmpl")}"
 
   vars {
