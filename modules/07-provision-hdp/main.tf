@@ -7,7 +7,7 @@ module "provision_hdp" {
 locals {
 
   no_instances = "${data.consul_keys.hdp.var.no_instances}" # number of servers in cluster
-  no_namenodes = "${data.consul_keys.hdp.var.no_instances}" # number of namenodes in cluster
+  no_namenodes = "${data.consul_keys.hdp.var.no_namenodes}" # number of namenodes in cluster
 
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 
@@ -209,14 +209,26 @@ data "template_file" "generate_blueprint_dynamic_single" {
   }
 }
 
+# generate the block with n_namenodes and their clients and services
+data "template_file" "generate_blueprint_master_block" {
+  count = "${length(local.namenodes_dns)}"
+  template = "${file("${path.module}/resources/templates/blueprint_dynamic_host_group_master.tmpl")}"
+
+  vars {
+    host_group_name = "- host_group: \"hdp-master-0${count.index + 1}\""
+    clients = "clients: ${local.master_clients}"
+    services_text = "services:"
+    services = "${local.master_services}\n"
+  }
+}
+
 # generate the cluster blueprint_dynamic block of the hdp-config file
 data "template_file" "generate_blueprint_dynamic_cluster" {
   count = "${local.type == "classic" ? 1 : 0}"
   template = "${file("${path.module}/resources/templates/blueprint_dynamic_cluster.tmpl")}"
   vars {
     ambari_services = "${local.ambari_services}"
-    master_clients = "${local.master_clients}"
-    master_services = "${local.master_services}"
+    host_group_master = "${join("",data.template_file.generate_blueprint_master_block.*.rendered)}"
     slave_clients = "${local.slave_clients}"
     slave_services = "${local.slave_services}"
   }
