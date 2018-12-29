@@ -56,7 +56,7 @@ locals {
   master_services = "${data.consul_keys.hdp.var.master_services}" # services on namenodes
   slave_clients = "${data.consul_keys.hdp.var.slave_clients}" # clients on slaves (workers)
   slave_services = "${data.consul_keys.hdp.var.slave_services}" # services on slaves (workers)
-  single = "${local.no_instances == 1 ? 1 : 0}" # is it a single node or multi?
+  #single = "${local.no_instances == 1 ? 1 : 0}" # is it a single node or multi?
 
   hdp_config_tmpl = "hdp-config.yml.tmpl" # cluster configuration template - one for all
 }
