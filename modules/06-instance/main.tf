@@ -10,7 +10,7 @@ locals {
 }
 
 resource "aws_instance" "test_instance" {
-  count = "${data.consul_keys.app.var.no_instances}"
+  count = "${local.no_instances}"
   ami = "${data.consul_keys.app.var.ami}"
   instance_type = "${data.consul_keys.app.var.instance_type}"
   subnet_id = "${data.consul_keys.app.var.subnet_id}"
