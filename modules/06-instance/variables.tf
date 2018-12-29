@@ -52,18 +52,18 @@ data "consul_keys" "app" {
   key {
     name    = "type"
     path    = "${var.path_in_consul_hdp}${var.cluster_type}/type"
-    description = "type of cluster: single or cluster"
+    #description = "type of cluster: single or cluster"
   }
   key {
     name    = "no_namenodes"
     path    = "${var.path_in_consul_hdp}${var.cluster_type}/no_namenodes"
-    description = "Number of namenodes in cluster: 1 or 2"
+    #description = "Number of namenodes in cluster: 1 or 2"
     default = "2"
   }
   key {
     name    = "no_datanodes"
     path    = "${var.path_in_consul_hdp}${var.cluster_type}/no_datanodes"
-    description = "Number of datanodes "
+    #description = "Number of datanodes "
     default = "0"
   }
 }
