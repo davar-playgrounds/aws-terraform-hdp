@@ -2,6 +2,13 @@ provider "aws" {
   region = "${data.consul_keys.app.var.region}"
 }
 
+locals {
+  type = "${data.consul_keys.app.var.type}"
+  no_namenodes = "${data.consul_keys.app.var.no_namenodes}"
+  no_datanodes = "${data.consul_keys.app.var.no_datanodes}"
+  no_instances = "${local.type == "single" ? 1 : 1 + local.no_namenodes + local.no_datanodes}"
+}
+
 resource "aws_instance" "test_instance" {
   count = "${data.consul_keys.app.var.no_instances}"
   ami = "${data.consul_keys.app.var.ami}"
