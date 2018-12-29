@@ -92,7 +92,7 @@ data "template_file" "ansible_inventory_single" {
 # generate a datanode file - one datanode per line
 # this file is used later in the process to render the ansible-hosts file
 data "template_file" "generate_datanode_hostname_cluster" {
-  count = "${local.type == "cluster" ? local.no_instances - local.no_namenodes : 0}" # workaround
+  count = "${local.type == "cluster" ? local.no_datanodes : 0}" # workaround
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
   vars {
     datanode-text = "${element(local.datanodes_ips, count.index)} ansible_host=${element(local.datanodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
