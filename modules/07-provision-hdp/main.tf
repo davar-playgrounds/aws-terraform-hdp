@@ -7,7 +7,7 @@ module "provision_hdp" {
 locals {
 
   type = "${data.consul_keys.hdp.var.type}" # single or cluster
-  no_instances = "${data.consul_keys.hdp.var.no_instances}" # number of servers in cluster
+  no_datanodes = "${data.consul_keys.hdp.var.no_datanodes}" # number of datanodes in cluster
   no_namenodes = "${local.type == "cluster" ? data.consul_keys.hdp.var.no_namenodes : 0}" # number of namenodes in cluster
 
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
@@ -27,8 +27,8 @@ locals {
   # indices to create the dynamic code in case single node cluster is also used
   # if a single node cluster -> indices are 0, else second server is namenode 1,
   # third server is namenode 2 and all the others are datanodes
-  namenode_idx = "${local.no_instances == 1 ? 0 : 1}"
-  datanode_idx = "${local.no_instances == 1 ? 0 : 1 + local.no_namenodes}"
+  namenode_idx = "${local.no_datanodes == 0 ? 0 : 1}"
+  datanode_idx = "${local.no_datanodes == 0 ? 0 : 1 + local.no_namenodes}"
 
 
   # next 2 servers are dedicated namenodes

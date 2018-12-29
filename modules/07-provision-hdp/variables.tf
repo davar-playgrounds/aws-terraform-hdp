@@ -15,8 +15,9 @@ data "consul_keys" "hdp" {
   }
 
   key {
-    name = "no_instances"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/no_instances"
+    name = "no_datanodes"
+    path = "${var.path_in_consul_hdp}${var.cluster_type}/no_datanodes"
+    default = 0
   }
 
   key {
