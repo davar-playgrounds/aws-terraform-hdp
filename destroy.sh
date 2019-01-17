@@ -1,8 +1,8 @@
 #!/bin/bash
 
 COMMAND=destroy
-PWD=/home/centos/aws-consul-terraform/modules
-
+#PWD=/home/centos/aws-consul-terraform/modules
+PWD=/local-git/modules
 
 #for i in {7..6}
 #do
@@ -10,25 +10,24 @@ PWD=/home/centos/aws-consul-terraform/modules
 #    echo yes | terraform $COMMAND -var cluster_type=$1
 #    rm *.tfstate*
 #    cd ..
-#done  
+#done
 
 
 
 for i in {5..1}
 do
    cd $PWD/0$i*
+   terraform init
    echo yes | terraform $COMMAND
-   rm *.tfstate*
+   rm -f *.tfstate*
    cd ..
 done
 
 cd $PWD
 cd ..
 
-echo "Restart consul..."
-sudo systemctl restart consul.service
+#echo "Restart consul..."
+#sleep 5
 
-sleep 5
-
-echo "Print out all key-values from consul:"
-consul kv get -recurse
+#echo "Print out all key-values from consul:"
+#consul kv get -recurse
