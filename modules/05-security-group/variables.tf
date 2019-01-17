@@ -21,16 +21,22 @@ data "consul_keys" "app" {
     path    = "${var.path_in_consul}/region"
   }
   key {
+    name    = "path_to_generated_aws_properties"
+    path    = "${var.path_in_consul}/path_to_generated_aws_properties"
+  }
+  key {
     name    = "cidr_block"
     path    = "${var.path_in_consul}/cidr_block"
   }
   key {
-    name    = "vpc_id"
-    path    = "${var.path_in_consul}/vpc_id"
+    name    = "security_group_name"
+    path    = "${var.path_in_consul}/security_group_name"
   }
+}
+
+data "consul_keys" "aws" {
   key {
     name    = "default_security_group_id"
-    path    = "${var.path_in_consul}/default_security_group_id"
+    path    = "${data.consul_keys.app.var.path_to_generated_aws_properties}/default_security_group_id"
   }
-
 }

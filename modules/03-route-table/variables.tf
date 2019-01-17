@@ -10,13 +10,6 @@ variable "consul_port" {
 variable "datacenter" {
   default   = "dc1"
 }
-variable "name" {
-  default = "Terraform Route Table"
-}
-variable "cidr_block_all" {
-  default = "0.0.0.0/0"
-}
-
 
 data "consul_keys" "app" {
   key {
@@ -24,19 +17,22 @@ data "consul_keys" "app" {
     path    = "${var.path_in_consul}/region"
   }
   key {
-    name    = "vpc_id"
-    path    = "${var.path_in_consul}/vpc_id"
+    name    = "path_to_generated_aws_properties"
+    path    = "${var.path_in_consul}/path_to_generated_aws_properties"
   }
   key {
-    name    = "cidr_block"
-    path    = "${var.path_in_consul}/cidr_block"
+    name    = "route_table_cidr_block_all"
+    path    = "${var.path_in_consul}/route_table_cidr_block_all"
   }
+}
+
+data "consul_keys" "aws" {
   key {
     name    = "igw_id"
-    path    = "${var.path_in_consul}/igw_id"
+    path    = "${data.consul_keys.app.var.path_to_generated_aws_properties}/igw_id"
   }
   key {
     name    = "main_route_table_id"
-    path    = "${var.path_in_consul}/main_route_table_id"
+    path    = "${data.consul_keys.app.var.path_to_generated_aws_properties}/main_route_table_id"
   }
 }
