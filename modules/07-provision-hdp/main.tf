@@ -21,8 +21,8 @@ locals {
   #############################
 
   ## first server is ambari - no matter if single or cluster
-  ambari_ips = "${local.public_ips[0]}"
   ambari_dns = "${local.public_dns[0]}"
+  ambari_ips = "${local.public_ips[0]}"
 
   # indices to create the dynamic code in case single node cluster is also used
   # if a single node cluster -> indices are 0, else second server is namenode 1,
@@ -78,8 +78,8 @@ data "template_file" "ansible_inventory_single" {
   count = "${local.type == "single" ? 1 : 0}"
   template = "${file("${path.module}/resources/templates/ansible_inventory_single.yml.tmpl")}"
   vars {
-    ansible_hdp_master_name = "${local.public_dns[0]}"
-    ansible_hdp_master_hosts = "${local.public_ips[0]}"
+    ansible_hdp_master_name = "${local.ambari_dns}"
+    ansible_hdp_master_hosts = "${local.ambari_ips}"
   }
 }
 
@@ -95,7 +95,7 @@ data "template_file" "generate_datanode_hostname_cluster" {
   count = "${local.type == "cluster" ? local.no_datanodes : 0}" # workaround
   template = "${file("${path.module}/resources/templates/datanode_hostname.tmpl")}"
   vars {
-    datanode-text = "${element(local.datanodes_ips, count.index)} ansible_host=${element(local.datanodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    datanode-text = "${element(local.datanodes_ips, count.index)} ansible_host=${element(local.datanodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"/home/centos/.ssh/id_rsa\""
   }
 }
 
@@ -104,7 +104,7 @@ data "template_file" "generate_namenode_hostname_cluster" {
   template = "${file("${path.module}/resources/templates/namenode_hostname.tmpl")}"
   vars {
     host-group-name = "[hdp-master-0${count.index + 1}]"
-    namenode-text = "${element(local.namenodes_ips, count.index)} ansible_host=${element(local.namenodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    namenode-text = "${element(local.namenodes_ips, count.index)} ansible_host=${element(local.namenodes_dns, count.index)} ansible_user=centos ansible_ssh_private_key_file=\"/home/centos/.ssh/id_rsa\""
   }
 }
 
@@ -115,7 +115,7 @@ data "template_file" "ansible_inventory_cluster" {
   template = "${file("${path.module}/resources/templates/ansible_inventory_cluster.yml.tmpl")}"
   vars {
     ambari-services-title = "[ambari-services]"
-    ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file=\"~/.ssh/id_rsa\""
+    ambari-ansible-text = "${local.ambari_ips} ambari_host=${local.ambari_dns} ansible_user=centos ansible_ssh_private_key_file=\"/home/centos/.ssh/id_rsa\""
     namenode-ansible-text = "${join("",data.template_file.generate_namenode_hostname_cluster.*.rendered)}"
     hdp-worker-title = "[hdp-worker]"
     datanode-ansible-text = "${join("",data.template_file.generate_datanode_hostname_cluster.*.rendered)}"
@@ -192,7 +192,7 @@ data "template_file" "hdp_config" {
     hdp_build_number = "${local.hdp_build_number}"
     database = "${local.database}"
     # the blueprint_dynamic block is built based on type is single or cluster
-    blueprint_dynamic = "${local.type == "single" ? join("", data.template_file.generate_blueprint_dynamic_single.*.rendered) : join("", data.template_file.generate_blueprint_dynamic_cluster.*.rendered)}"
+    blueprint_dynamic = "" #"${local.type == "single" ? join("", data.template_file.generate_blueprint_dynamic_single.*.rendered) : join("", data.template_file.generate_blueprint_dynamic_cluster.*.rendered)}"
   }
 }
 
@@ -237,33 +237,34 @@ resource "null_resource" "prepare_nodes" {
     "local_file.hdp_config_rendered"
   ]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${path.module}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
   }
 }
 
 resource "null_resource" "install_ambari" {
   depends_on = ["null_resource.prepare_nodes"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/install_ambari.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${path.module}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/install_ambari.yml"
   }
 }
 
 resource "null_resource" "configure_ambari" {
   depends_on = ["null_resource.install_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/configure_ambari.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${path.module}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/configure_ambari.yml"
   }
 }
 
 ## configure postgres for Ranger and Ranger KMS
 resource "null_resource" "configure_postgres" {
+  count = "${local.database == "postgres" ? "1" : "0"}"
   depends_on = ["null_resource.configure_ambari"]
 
   # install, configure and prepare DB objects for Ranger and RangerKMS
   provisioner "remote-exec" {
     connection {
       type     = "ssh"
-      host     = "${local.public_ips[0]}"
+      host     = "${local.ambari_ips}"
       user     = "centos" #"${local.template_user}"
       private_key = "${file("/home/centos/.ssh/id_rsa")}"
       #password = "${local.template_password}"
@@ -273,15 +274,16 @@ resource "null_resource" "configure_postgres" {
 }
 
 resource "null_resource" "apply_blueprint" {
-  depends_on = ["null_resource.configure_postgres"]
+  depends_on = ["null_resource.configure_postgres",
+                "null_resource.configure_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${path.module}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml"
   }
 }
 
 resource "null_resource" "post_install" {
   depends_on = ["null_resource.apply_blueprint"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml ${path.module}/resources/ansible-hortonworks/playbooks/post_install.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${path.module}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/post_install.yml"
   }
 }
