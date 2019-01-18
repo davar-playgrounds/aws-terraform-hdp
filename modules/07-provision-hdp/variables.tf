@@ -4,6 +4,10 @@ variable "path_in_consul" {
   default   = "test/master/aws/test-instance"
 }
 
+variable "s3a_consul" {
+  default = "aws/s3a"
+}
+
 variable "path_in_consul_hdp" {
   default   = "test/master/aws/"
 }
@@ -74,5 +78,22 @@ data "consul_keys" "hdp" {
   key {
     name = "slave_services"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/slave_services"
+  }
+}
+
+data "consul_keys" "s3a" {
+  key {
+    name = "s3a_access_key"
+    path = "aws/s3a/access_key"
+  }
+
+  key {
+    name = "s3a_access_key"
+    path = "${var.s3a_consul}/access_key"
+  }
+
+  key {
+    name = "s3a_secret_key"
+    path = "${var.s3a_consul}/secret_key"
   }
 }
