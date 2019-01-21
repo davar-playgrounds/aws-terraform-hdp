@@ -1,5 +1,5 @@
-cluster_type = "min-single"
+#cluster_type = "min-single"
 #cluster_type = "hdp-single"
 #cluster_type = "min-cluster"
 #cluster_type = "max-cluster"
-#cluster_type = "hive-s3"
+cluster_type = "hive-s3"

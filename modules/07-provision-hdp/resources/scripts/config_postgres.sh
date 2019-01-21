@@ -16,11 +16,11 @@ sudo tee $PG_HBA_CONF <<EOF
 host  all  all 0.0.0.0/0 md5
 
 # "local" is for Unix domain socket connections only
-local   all   postgres,rangeradmin,rangerkms                                     trust
+local   all   hive,postgres,rangeradmin,rangerkms                                     trust
 # IPv4 local connections:
-host    all   postgres,rangeradmin,rangerkms             127.0.0.1/32            trust
+host    all   hive,postgres,rangeradmin,rangerkms             127.0.0.1/32            trust
 # IPv6 local connections:
-host    all   postgres,rangeradmin,rangerkms             ::1/128                 ident
+host    all   hive,postgres,rangeradmin,rangerkms             ::1/128                 ident
 # Allow replication connections from localhost, by a user with the
 # replication privilege.
 #local   replication     postgres                                peer

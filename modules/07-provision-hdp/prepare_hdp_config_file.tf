@@ -1,3 +1,5 @@
+/*
+
 #######################
 ### hdp config file ###
 #######################
@@ -44,6 +46,7 @@ data "template_file" "generate_blueprint_dynamic_cluster" {
   }
 }
 
+*/
 ### prepare hdp config file
 data "template_file" "hdp_config" {
   template = "${file("${path.module}/resources/templates/${local.hdp_config_tmpl}")}"

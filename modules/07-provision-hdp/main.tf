@@ -13,7 +13,9 @@ locals {
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 
   ## all DNS and IP needed for the Hadoop cluster
+  #public_dns = ["dns.marko.com"]
   public_dns = "${module.provision_hdp.public_dns}"
+  #public_ips = ["1.1.1.1"]
   public_ips = "${module.provision_hdp.public_ip}"
 
   #############################
@@ -60,17 +62,19 @@ locals {
 
   hdp_config_tmpl = "hdp-config.yml.tmpl" # cluster configuration template - one for all
 
+  #components_str = "${data.consul_keys.hdp.var.components}"
+  #components = "${list(local.components_str)}"
+  components = "${data.consul_keys.hdp.var.components}"
+
   #########################
   ### variables for s3a ###
   #########################
 
+  s3a = "${data.consul_keys.hdp.var.s3a}"
   s3a_access_key = "${data.consul_keys.s3a.var.s3a_access_key}"
   s3a_secret_key = "${data.consul_keys.s3a.var.s3a_secret_key}"
 }
-
-
 ##########################
-### ansible-hosts and hdp-config files are rendered, below are resources for provisioning desired architecture
 
 resource "null_resource" "passwordless_ssh" {
   depends_on = ["module.provision_hdp"]

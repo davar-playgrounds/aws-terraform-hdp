@@ -1,26 +1,26 @@
 {
   "configurations" : [
     {
-      "core-site": {
-        "hadoop.proxyuser.hcat.groups" : "*",
-        "hadoop.proxyuser.hcat.hosts" : "*"
-      }
-    },
-    {
-      "hadoop-env" : {
-        "dtnode_heapsize" : "1024m",
-        "namenode_heapsize" : "2048m",
-        "namenode_opt_maxnewsize" : "384m",
-        "namenode_opt_newsize" : "384m"
-      }
-    },
-    {
       "hdfs-site" : {
-        "dfs.datanode.data.dir" : "/hadoop/hdfs/data",
-        "dfs.datanode.failed.volumes.tolerated" : "0",
-        "dfs.replication" : "1",
         "fs.s3a.access.key" : "${s3a_access_key}",
-        "fs.s3a.secret.key" : "${s3a_secret_key}"
+        "fs.s3a.secret.key" : "${s3a_secret_key}",
+        "dfs.replication" : "1"
+      }
+    },
+    {
+      "hive-site" : {
+        "fs.s3a.access.key" : "${s3a_access_key}",
+        "fs.s3a.secret.key" : "${s3a_secret_key}",
+        "javax.jdo.option.ConnectionURL" : "jdbc:postgresql://${postgres_server}:5432/hive",
+        "javax.jdo.option.ConnectionDriverName" : "org.postgresql.Driver",
+        "javax.jdo.option.ConnectionUserName" : "hive",
+        "javax.jdo.option.ConnectionPassword" : "hive"
+      }
+    },
+    {
+      "hive-env" : {
+        "hive_database": "Existing PostgreSQL Database",
+        "hive_database_type": "postgres"
       }
     }
   ],
@@ -29,15 +29,7 @@
       "name" : "hdp-master",
       "configurations" : [ ],
       "components" : [
-        { "name" : "ZOOKEEPER_CLIENT" },
-        { "name" : "HDFS_CLIENT" },
-        { "name" : "ZOOKEEPER_SERVER" },
-        { "name" : "SECONDARY_NAMENODE" },
-        { "name" : "NAMENODE" },
-        { "name" : "AMBARI_SERVER" },
-        { "name" : "METRICS_COLLECTOR" },
-        { "name" : "DATANODE" },
-        { "name" : "METRICS_MONITOR" }
+${components_1}
       ]
     }
   ],
