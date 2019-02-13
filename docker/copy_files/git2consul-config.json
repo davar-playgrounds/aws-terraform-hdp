@@ -2,7 +2,7 @@
   "version": "1.0",
   "repos" : [{
     "name" : "test",
-    "url" : "https://github.com/markokole/git2consul-data.git",
+    "url" : "https://github.com/markokole/aws-terraform-hdp-config.git",
     "include_branch_name": true,
     "expand_keys": true,
     "expand_keys_diff": true,
