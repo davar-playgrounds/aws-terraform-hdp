@@ -9,3 +9,7 @@ output "public_ip" {
 output "public_dns" {
   value = "${aws_instance.test_instance.*.public_dns}"
 }
+
+output "private_dns" {
+  value = "${aws_instance.test_instance.*.private_dns}"
+}
