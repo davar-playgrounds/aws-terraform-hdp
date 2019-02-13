@@ -1,5 +1,3 @@
-#cluster_type = "min-single"
-#cluster_type = "hdp-single"
-#cluster_type = "min-cluster"
-#cluster_type = "max-cluster"
-cluster_type = "hive-s3"
+#cluster_type = "single-min-s3"
+#cluster_type = "single-hive-s3"
+cluster_type = "multi-min-s3"

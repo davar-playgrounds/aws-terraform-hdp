@@ -1,0 +1,40 @@
+{
+  "configurations" : [
+    {
+      "hdfs-site" : {
+        "fs.s3a.access.key" : "${s3a_access_key}",
+        "fs.s3a.secret.key" : "${s3a_secret_key}",
+        "dfs.replication" : "1"
+      }
+    },
+    {
+      "hive-site" : {
+        "fs.s3a.access.key" : "${s3a_access_key}",
+        "fs.s3a.secret.key" : "${s3a_secret_key}",
+        "javax.jdo.option.ConnectionURL" : "jdbc:postgresql://${postgres_server}:5432/hive",
+        "javax.jdo.option.ConnectionDriverName" : "org.postgresql.Driver",
+        "javax.jdo.option.ConnectionUserName" : "hive",
+        "javax.jdo.option.ConnectionPassword" : "hive"
+      }
+    },
+    {
+      "hive-env" : {
+        "hive_database": "Existing PostgreSQL Database",
+        "hive_database_type": "postgres"
+      }
+    }
+  ],
+  "host_groups" : [
+    {
+      "name" : "hdp-master",
+      "configurations" : [ ],
+      "components" : [
+${master_services}
+      ]
+    }
+  ],
+  "Blueprints" : {
+    "stack_name" : "HDP",
+    "stack_version" : "3.1"
+  }
+}

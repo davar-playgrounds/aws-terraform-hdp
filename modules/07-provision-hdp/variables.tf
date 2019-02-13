@@ -57,33 +57,16 @@ data "consul_keys" "hdp" {
     path = "${var.path_in_consul_hdp}${var.cluster_type}/ambari_services"
   }
   key {
-    name = "master_clients"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/master_clients"
-  }
-  key {
     name = "master_services"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/master_services"
-  }
-  key {
-    name = "slave_clients"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/slave_clients"
   }
   key {
     name = "slave_services"
     path = "${var.path_in_consul_hdp}${var.cluster_type}/slave_services"
   }
-  key {
-    name = "components"
-    path = "${var.path_in_consul_hdp}${var.cluster_type}/components"
-  }
 }
 
 data "consul_keys" "s3a" {
-  key {
-    name = "s3a_access_key"
-    path = "aws/s3a/access_key"
-  }
-
   key {
     name = "s3a_access_key"
     path = "${var.s3a_consul}/access_key"

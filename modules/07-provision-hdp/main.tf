@@ -13,18 +13,21 @@ locals {
   workdir="${path.cwd}/output/hdp-server/${local.clustername}"
 
   ## all DNS and IP needed for the Hadoop cluster
-  #public_dns = ["dns.marko.com"]
-  public_dns = "${module.provision_hdp.public_dns}"
-  #public_ips = ["1.1.1.1"]
   public_ips = "${module.provision_hdp.public_ip}"
+  public_dns = "${module.provision_hdp.public_dns}"
+  private_dns = "${module.provision_hdp.private_dns}"
+
+  #single = "${local.no_instances == 1 ? 1 : 0}" # is it a single node or multi?
 
   #############################
   ### variables for cluster ###
   #############################
 
   ## first server is ambari - no matter if single or cluster
-  ambari_dns = "${local.public_dns[0]}"
   ambari_ips = "${local.public_ips[0]}"
+  ambari_dns = "${local.public_dns[0]}"
+  ambari_dns_private = "${local.private_dns[0]}"
+
 
   # indices to create the dynamic code in case single node cluster is also used
   # if a single node cluster -> indices are 0, else second server is namenode 1,
@@ -36,12 +39,21 @@ locals {
   # next 2 servers are dedicated namenodes
   # namenode_dns holds value of dns for the HDP cluster (Ambari server excluded)
   # these are only used when multinode cluster, otherwise they point to first server
-  namenodes_dns = "${slice(local.public_dns, local.namenode_idx, local.namenode_idx + local.no_namenodes)}"
   namenodes_ips = "${slice(local.public_ips, local.namenode_idx, local.namenode_idx + local.no_namenodes)}"
+  namenodes_dns = "${slice(local.public_dns, local.namenode_idx, local.namenode_idx + local.no_namenodes)}"
+  namenodes_dns_private = "${slice(local.private_dns, local.namenode_idx, local.namenode_idx + local.no_namenodes)}"
+  # workaround in case it is a single node cluster
+  # in if statement - both get evaluated
+  dummy_list = ["foo1", "foo2"]
+  namenodes_dns_private_temp = "${concat(local.namenodes_dns_private, local.dummy_list)}"
+
+  nn1_dns = "${local.type == "cluster" ? local.namenodes_dns_private_temp[0] : local.ambari_dns_private}"
+  nn2_dns = "${local.type == "cluster" ? local.namenodes_dns_private_temp[1] : local.ambari_dns_private}"
 
   ## if multinode cluster: rest of the servers are datanodes (from and including server 4)
-  datanodes_dns = "${slice(local.public_dns, local.datanode_idx, length(local.public_dns))}"
   datanodes_ips = "${slice(local.public_ips, local.datanode_idx, length(local.public_ips))}"
+  datanodes_dns = "${slice(local.public_dns, local.datanode_idx, length(local.public_dns))}"
+  datanodes_dns_private = "${slice(local.private_dns, local.datanode_idx, length(local.public_dns))}"
 
   #########################
   ### variables for HDP ###
@@ -54,17 +66,12 @@ locals {
   database = "${data.consul_keys.hdp.var.database}" # database for metastore - postgres
 
   ambari_services = "${data.consul_keys.hdp.var.ambari_services}" # services on management server
-  master_clients = "${data.consul_keys.hdp.var.master_clients}" # clients on namenodes
   master_services = "${data.consul_keys.hdp.var.master_services}" # services on namenodes
-  slave_clients = "${data.consul_keys.hdp.var.slave_clients}" # clients on slaves (workers)
   slave_services = "${data.consul_keys.hdp.var.slave_services}" # services on slaves (workers)
-  #single = "${local.no_instances == 1 ? 1 : 0}" # is it a single node or multi?
 
   hdp_config_tmpl = "hdp-config.yml.tmpl" # cluster configuration template - one for all
 
-  #components_str = "${data.consul_keys.hdp.var.components}"
-  #components = "${list(local.components_str)}"
-  components = "${data.consul_keys.hdp.var.components}"
+  gpfs_quorum = "${distinct(concat(local.namenodes_dns_private, local.datanodes_dns_private))}" # for config hdfs-site
 
   #########################
   ### variables for s3a ###
@@ -75,14 +82,25 @@ locals {
   s3a_secret_key = "${data.consul_keys.s3a.var.s3a_secret_key}"
 }
 ##########################
+/*
+resource "null_resource" "write_out" {
+  depends_on = ["module.provision_hdp"]
 
+  provisioner "local-exec" {
+    command = <<EOF
+      echo "*********************************************************"
+      echo "namenodes_dns_private: ${join(", ", local.namenodes_dns_private)}"
+EOF
+  }
+}
+*/
 resource "null_resource" "passwordless_ssh" {
   depends_on = ["module.provision_hdp"]
 
   provisioner "local-exec" {
-    command = <<-EOF
+    command = <<EOF
       echo "Sleeping for 20 seconds..."; sleep 20
-    EOF
+EOF
   }
 
   provisioner "local-exec" {
@@ -106,21 +124,21 @@ resource "null_resource" "prepare_nodes" {
     "local_file.hdp_config_rendered"
   ]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/${var.cluster_type}.json ${path.module}/resources/ansible-hortonworks/playbooks/prepare_nodes.yml"
   }
 }
 
 resource "null_resource" "install_ambari" {
   depends_on = ["null_resource.prepare_nodes"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/install_ambari.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/${var.cluster_type}.json ${path.module}/resources/ansible-hortonworks/playbooks/install_ambari.yml"
   }
 }
 
 resource "null_resource" "configure_ambari" {
   depends_on = ["null_resource.install_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/configure_ambari.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/${var.cluster_type}.json ${path.module}/resources/ansible-hortonworks/playbooks/configure_ambari.yml"
   }
 }
 
@@ -146,13 +164,13 @@ resource "null_resource" "apply_blueprint" {
   depends_on = ["null_resource.configure_postgres",
                 "null_resource.configure_ambari"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/${var.cluster_type}.json ${path.module}/resources/ansible-hortonworks/playbooks/apply_blueprint.yml"
   }
 }
 
 resource "null_resource" "post_install" {
   depends_on = ["null_resource.apply_blueprint"]
   provisioner "local-exec" {
-    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/blueprint_hdfs_only.json ${path.module}/resources/ansible-hortonworks/playbooks/post_install.yml"
+    command = "export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook --inventory=${local.workdir}/ansible-hosts --extra-vars=cloud_name=static --extra-vars=@${local.workdir}/hdp-config.yml --extra-vars=blueprint_file=${local.workdir}/${var.cluster_type}.json ${path.module}/resources/ansible-hortonworks/playbooks/post_install.yml"
   }
 }
